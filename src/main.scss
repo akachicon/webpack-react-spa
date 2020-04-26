@@ -1,0 +1,15 @@
+@use './a.scss';
+@use './b.scss';
+@use './style/c.scss';
+
+.app-child {
+  @include b.b;
+  @include c.c;
+
+  /* background-image: url(./assets/logo.png); */
+  height: a.$some-var;
+  background-color: aquamarine;
+
+  /* @mixin a; */
+  //@mixin b;
+}

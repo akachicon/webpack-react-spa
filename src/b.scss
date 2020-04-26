@@ -1,0 +1,5 @@
+$some-var: 20px;
+
+@mixin b {
+	width: $some-var;
+}
