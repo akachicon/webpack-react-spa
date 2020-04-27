@@ -17,7 +17,7 @@
     "build:base": "webpack --config ./webpack-config/webpack.base.config.js",
     "build:dev": "cross-env NODE_ENV=development webpack --config ./webpack-config/webpack.dev.config.js",
     "build:prod": "cross-env NODE_ENV=production webpack --config ./webpack-config/webpack.prod.config.js",
-    "serve:dev-server": "cross-env CSS_MODE=hot webpack-dev-server --config ./webpack-config/webpack.dev.config.js",
+    "serve:dev-server": "cross-env NODE_ENV=development CSS_MODE=hot webpack-dev-server --config ./webpack-config/webpack.dev.config.js",
     "lint:css": "stylelint --cache --cacheLocation=./node_modules/.cache/stylelint/ ./src",
     "cache:clear": "rm -rf ./node_modules/.cache"
   },
@@ -36,7 +36,7 @@
     "fibers": "^5.0.0",
     "file-loader": "^6.0.0",
     "friendly-errors-webpack-plugin": "^1.7.0",
-    "html-webpack-plugin": "^4.0.2",
+    "html-webpack-plugin": "github:akachicon/html-webpack-plugin",
     "resolve-url-loader": "^3.1.1",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",

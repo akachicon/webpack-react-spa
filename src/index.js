@@ -1,4 +1,3 @@
-// import 'core-js/es/promise';
 import customModule from './custom-module';
 import anotherCustomModule from './another-custom-module';
 import style from './main.scss';

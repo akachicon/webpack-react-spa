@@ -36,12 +36,28 @@ class HtmlWebpackInjectionPlugin {
               ...data.headTags,
               ...data.bodyTags
             ];
-            const { head: headFilters } = data.plugin.options.injection;
+            const {
+              head: headFilters,
+              exclude: excludeFilters
+            } = data.plugin.options.injection;
 
-            const filteredTags = filterTagsByPath(tags, headFilters);
-            const headTags = filteredTags.tags;
-            const bodyTags = tags.filter(
-              (tag, idx) => !filteredTags.idxs.includes(idx)
+            let includedTags = tags;
+            let headTags = tags;
+            let headIdxs = [];
+
+            if (Array.isArray(excludeFilters)) {
+              includedTags = filterTagsByPath(tags, excludeFilters).tags;
+              headTags = includedTags;
+            }
+
+            if (Array.isArray(headFilters)) {
+              const filteredHead = filterTagsByPath(includedTags, headFilters);
+              headTags = filteredHead.tags;
+              headIdxs = filteredHead.idxs;
+            }
+
+            const bodyTags = includedTags.filter(
+              (tag, idx) => !headIdxs.includes(idx)
             );
 
             data.headTags = headTags;

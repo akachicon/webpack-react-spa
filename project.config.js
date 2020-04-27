@@ -50,9 +50,6 @@ const devServer = {
 // in the env.
 const hotCss = process.env.CSS_MODE === 'hot';
 
-console.log('hot css', hotCss);
-console.log('NODE_ENV', process.env.NODE_ENV);
-
 module.exports = {
   baseDir,
   srcDir,

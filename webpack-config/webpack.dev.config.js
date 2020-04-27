@@ -22,7 +22,7 @@ const config = merge(baseConfig, {
     port: devServer.port || 3030,
     // To reload html automatically in hmr mode we
     // write it to the disk and set watchContentBase to be true.
-    watchContentBase: false, // devServer.watchContentBase || devServer.hot, // TODO:
+    watchContentBase: devServer.watchContentBase || devServer.hot,
     hot: devServer.hot
   },
   plugins: [
@@ -54,7 +54,7 @@ config.plugins = config.plugins.filter(
 
 if (config.devServer.hot) {
   config.devServer.writeToDisk =
-    file => new RegExp(`/${htmlFilename}`, 'g').test(file);
+    file => new RegExp(`/${htmlFilename}$`, 'g').test(file);
 }
 
 module.exports = config;

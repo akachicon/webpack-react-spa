@@ -1,3 +1,4 @@
+const path = require('path');
 const webpack = require('webpack');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const { CleanWebpackPlugin: CleanPlugin } = require('clean-webpack-plugin');
@@ -21,11 +22,13 @@ const {
   hotCss
 } = require('../project.config.js');
 
+const bootstrapEntry = path.resolve(__dirname, './config-parts/bootstrap.js');
+
 module.exports = {
   mode: 'none',
   context: baseDir,
   entry: {
-    main: [appEntry]
+    main: [bootstrapEntry, appEntry]
   },
   output: {
     path: outDir,
@@ -35,13 +38,13 @@ module.exports = {
     crossOriginLoading: 'anonymous'
   },
   resolve: {
-    extensions: ['.ts', '.js', '.json']
+    extensions: ['.ts', '.js', '.json', '.scss', '.css']
   },
   module: {
     rules: [
       {
         test: /\.js$/i,
-        exclude: '/node_modules/',
+        exclude: /node_modules/,
         loader: 'babel-loader'
       },
       {
