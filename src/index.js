@@ -1,6 +1,7 @@
 import customModule from './custom-module';
 import anotherCustomModule from './another-custom-module';
 import style from './main.scss';
+import imagini from './assets/imagini.png'
 
 console.log(`hello ${customModule.a}!`);
 

@@ -19,8 +19,5 @@ module.exports = {
   showErrors: !env.prod,
   minify: env.prod,
   cache: true, // to allow hmr with script inliner
-  cacheIgnore: [/.+\.hot-update\.js$/i],
-  injection: {
-    head: [/\.(css|png|jpe?g|svg)$/]
-  }
+  cacheIgnore: [/.+\.hot-update\.js$/i]
 };

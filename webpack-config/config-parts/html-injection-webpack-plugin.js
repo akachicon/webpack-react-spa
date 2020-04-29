@@ -27,6 +27,16 @@ const filterTagsByPath = (tags, filters) => {
 };
 
 class HtmlWebpackInjectionPlugin {
+  constructor({
+    head = [],
+    exclude = [],
+    getAdditionalTags = () => ({ head: [], body: [] })
+  } = {}) {
+    this.head = head;
+    this.exclude = exclude;
+    this.getAdditionalTags = getAdditionalTags;
+  }
+
   apply(compiler) {
     if (HtmlWebpackPlugin.getHooks) {
       compiler.hooks.compilation.tap('HtmlWebpackInjectionPlugin', compilation => {
@@ -39,7 +49,7 @@ class HtmlWebpackInjectionPlugin {
             const {
               head: headFilters,
               exclude: excludeFilters
-            } = data.plugin.options.injection;
+            } = this;
 
             let includedTags = tags;
             let headTags = tags;
@@ -59,9 +69,13 @@ class HtmlWebpackInjectionPlugin {
             const bodyTags = includedTags.filter(
               (tag, idx) => !headIdxs.includes(idx)
             );
+            const additionalTags = this.getAdditionalTags();
 
-            data.headTags = headTags;
-            data.bodyTags = bodyTags;
+            additionalTags.head = additionalTags.head || [];
+            additionalTags.body = additionalTags.body || [];
+
+            data.headTags = [...headTags, ...additionalTags.head];
+            data.bodyTags = [...bodyTags, ...additionalTags.body];
 
             callback(null, data);
           }

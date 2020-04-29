@@ -1,3 +1,5 @@
+// TODO: consider top level option for using css-modules
+
 const path = require('path');
 
 const defineGetters = mappings => Object.keys(mappings)
