@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const { loader: imageminLoader } = require('imagemin-webpack');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const { CleanWebpackPlugin: CleanPlugin } = require('clean-webpack-plugin');
 const ExtractCssChunksPlugin = require('extract-css-chunks-webpack-plugin');
@@ -23,10 +24,12 @@ const preloadRegex = /\.png$/; // TODO: write regex
 const {
   baseDir,
   outDir,
+  pathAliases,
   publicPath,
   appEntry,
   appGlobals,
   runtimeChunkName,
+  faviconPrefix,
   env,
   hotCss
 } = require('../project.config.js');
@@ -47,7 +50,8 @@ module.exports = {
     crossOriginLoading: 'anonymous'
   },
   resolve: {
-    extensions: ['.ts', '.js', '.json', '.scss', '.css']
+    extensions: ['.ts', '.js', '.json', '.scss', '.css'],
+    alias: pathAliases
   },
   module: {
     rules: [
@@ -55,19 +59,6 @@ module.exports = {
         test: /\.js$/i,
         exclude: /node_modules/,
         loader: 'babel-loader'
-      },
-      {
-        test: /\.(png|jpe?g|gif|svg|webp)$/i,
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              limit: 0,
-              // afterEach: env.prod ? addToFileLoaderStore : undefined
-              afterEach: addToFileLoaderStore // TODO:
-            },
-          },
-        ],
       },
       {
         test: /\.s?css$/i,
@@ -79,6 +70,7 @@ module.exports = {
               // use reloadAll option if hmr doesn't work properly
             },
           },
+          // TODO: postcss loader with optimizations
           {
             loader: 'css-loader',
             options: {
@@ -87,10 +79,10 @@ module.exports = {
               //
               // modules: {
               //   mode: resourcePath => {
-              //     if (/\.pure.css$/i.test(resourcePath)) {
+              //     if (/\.pure.s?css$/i.test(resourcePath)) {
               //       return 'pure';
               //     }
-              //     if (/\.global.css$/i.test(resourcePath)) {
+              //     if (/\.global.s?css$/i.test(resourcePath)) {
               //       return 'global';
               //     }
               //     return 'local';
@@ -103,12 +95,10 @@ module.exports = {
               sourceMap: env.dev
             }
           },
-          // TODO: postcss loader with optimizations
           {
             loader: 'resolve-url-loader',
             options: {
-              sourceMap: true, // needs to be true for sass to work as expected
-              sourceMapContents: env.dev
+              sourceMap: env.dev
             }
           },
           {
@@ -124,6 +114,21 @@ module.exports = {
           }
         ],
       },
+      // TODO: font rule
+      {
+        test: /\.(jpe?g|png|webp|svg)$/i,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              name: env.dev ? '[name].[ext]' : '[name].[contenthash:6].[ext]',
+              outputPath: 'images',
+              limit: 8 * 1024, // 8kb
+              afterEach: env.prod ? addToFileLoaderStore : undefined
+            }
+          }
+        ]
+      }
     ]
   },
   optimization: {
@@ -185,6 +190,7 @@ module.exports = {
     new HtmlPlugin(htmlPluginOptions),
     new FaviconsPlugin({
       logo: html.favicon,
+      prefix: faviconPrefix,
       favicons: {
         appName: html.title,
         icons: {

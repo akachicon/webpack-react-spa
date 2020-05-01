@@ -19,17 +19,30 @@ const defineGetters = mappings => Object.keys(mappings)
 // general app settings.
 
 const baseDir = __dirname;
-const srcDir = path.resolve(baseDir, 'src');
-const outDir = path.resolve(baseDir, 'dist');
-const assetDir = path.resolve(srcDir, 'assets');
+const srcDir = path.join(baseDir, 'src');
+const outDir = path.join(baseDir, 'dist');
+const assetDir = path.join(srcDir, 'assets');
+
+const assetDirJoin = (...files) => path.join(assetDir, ...files);
+
+const pathAliases = {
+  '@': srcDir,
+  '@fonts': assetDirJoin('fonts'),
+  '@images': assetDirJoin('images')
+};
 const publicPath = '/';
-const appEntry = path.resolve(srcDir, 'index.js');
+const appEntry = path.join(srcDir, 'index.js');
 const appGlobals = {};
 const runtimeChunkName = 'runtime';
+
+// Use favicon output prefix path to avoid path rewriting
+// with image optimization plugin.
+const faviconPrefix = 'favicon/';
+
 const htmlFilename = 'index.html'; // output html filename
 const html = {
   title: 'THE APP',
-  favicon: path.join(assetDir, 'favicon.svg'),
+  favicon: path.join(assetDir, 'images', 'favicon.svg'),
   template: path.join(srcDir, 'index.html'),
   templateParameters: {}
 };
@@ -56,10 +69,12 @@ module.exports = {
   baseDir,
   srcDir,
   outDir,
+  pathAliases,
   publicPath,
   appEntry,
   appGlobals,
   runtimeChunkName,
+  faviconPrefix,
   htmlFilename,
   html,
   env,

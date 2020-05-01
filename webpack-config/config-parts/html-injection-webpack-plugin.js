@@ -1,30 +1,18 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const filterTagsByPath = (tags, filters) => {
-  const filtered = {
-    tags: [],
-    idxs: []
-  };
-
-  filtered.tags = tags.filter((tag, idx) => {
+const filterTagsByPath = (tags, filters) => (
+  tags.filter(tag => {
     const src = tag.attributes && tag.attributes.src;
     const href = tag.attributes && tag.attributes.href;
     const resourcePath = src || href;
 
     if (!resourcePath) return false;
 
-    const pathMatch = filters.some(
+    return filters.some(
       filter => resourcePath.match(filter)
     );
-
-    if (pathMatch) {
-      filtered.idxs.push(idx)
-    }
-    return pathMatch;
-  });
-
-  return filtered;
-};
+  })
+);
 
 class HtmlWebpackInjectionPlugin {
   constructor({
@@ -53,21 +41,31 @@ class HtmlWebpackInjectionPlugin {
 
             let includedTags = tags;
             let headTags = tags;
-            let headIdxs = [];
 
-            if (Array.isArray(excludeFilters)) {
-              includedTags = filterTagsByPath(tags, excludeFilters).tags;
-              headTags = includedTags;
+            if (!Array.isArray(excludeFilters)) {
+              throw new Error('"exclude" has to be of type Array or unspecified');
             }
 
-            if (Array.isArray(headFilters)) {
-              const filteredHead = filterTagsByPath(includedTags, headFilters);
-              headTags = filteredHead.tags;
-              headIdxs = filteredHead.idxs;
+            if (excludeFilters.length) {
+              const excludedTags = filterTagsByPath(tags, excludeFilters);
+              const excludedTagsSet = new Set(excludedTags);
+
+              includedTags = tags.filter(
+                tag => !excludedTagsSet.has(tag)
+              );
             }
 
+            if (!Array.isArray(headFilters)) {
+              throw new Error('"head" has to be of type Array or unspecified');
+            }
+
+            if (headFilters.length) {
+              headTags = filterTagsByPath(includedTags, headFilters);
+            }
+
+            const headTagsSet = new Set(headTags);
             const bodyTags = includedTags.filter(
-              (tag, idx) => !headIdxs.includes(idx)
+              tag => !headTagsSet.has(tag)
             );
             const additionalTags = this.getAdditionalTags();
 

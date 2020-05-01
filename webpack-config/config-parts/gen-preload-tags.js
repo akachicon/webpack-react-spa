@@ -1,13 +1,9 @@
+const mimeTypes = require('mime-types');
 const { createHtmlTagObject } = require('html-webpack-plugin/lib/html-tags');
 
 const asAttr = {
   woff2: 'font',
   png: 'image'
-};
-
-const typeAttr = {
-  woff2: 'font/woff2',
-  png: 'image/png'
 };
 
 const getExt = path => path.slice(
@@ -24,7 +20,7 @@ const getAsAttr = path => {
 }
 const getTypeAttr = path => {
   const ext = getExt(path);
-  const attr = typeAttr[ext];
+  const attr = mimeTypes.lookup(ext);
 
   if (!attr) {
     throw new Error(`'type' attribute value does not exist for .${ext} extension`);
