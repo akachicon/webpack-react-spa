@@ -1,5 +1,32 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const optionValidators = {
+  head(val) {
+    if (!Array.isArray(val)) {
+      throw new Error('"head" has to be of type Array or unspecified');
+    }
+  },
+  exclude(val) {
+    if (!Array.isArray(val)) {
+      throw new Error('"exclude" has to be of type Array or unspecified');
+    }
+  },
+  getAdditionalTags(val) {
+    if (!(val instanceof Function)) {
+      throw new Error('"getAdditionalTags" has to be instance of Function or unspecified');
+    }
+  },
+  postProcessTag(val) {
+    if (!(val instanceof Function)) {
+      throw new Error('"postProcessTag" has to be instance of Function or unspecified');
+    }
+  }
+};
+
+const validateOptions = options => Object.entries(options).forEach(
+  ([name, val]) => optionValidators[name](val)
+);
+
 const filterTagsByPath = (
   tags,
   filters,
@@ -70,11 +97,19 @@ class HtmlWebpackInjectionPlugin {
   constructor({
     head = [],
     exclude = [],
-    getAdditionalTags = () => ({ head: [], body: [] })
+    getAdditionalTags = () => ({ head: [], body: [] }),
+    postProcessTag = tag => tag
   } = {}) {
+    validateOptions({
+      head,
+      exclude,
+      getAdditionalTags,
+      postProcessTag
+    });
     this.head = head;
     this.exclude = exclude;
     this.getAdditionalTags = getAdditionalTags;
+    this.postProcessTag = postProcessTag;
   }
 
   apply(compiler) {
@@ -94,10 +129,6 @@ class HtmlWebpackInjectionPlugin {
             let includedTags = tags;
             let headTags = tags;
 
-            if (!Array.isArray(excludeFilters)) {
-              throw new Error('"exclude" has to be of type Array or unspecified');
-            }
-
             if (excludeFilters.length) {
               const excludedTags = filterTagsByPath(tags, excludeFilters);
               const excludedTagsSet = new Set(excludedTags);
@@ -107,15 +138,11 @@ class HtmlWebpackInjectionPlugin {
               );
             }
 
-            if (!Array.isArray(headFilters)) {
-              throw new Error('"head" has to be of type Array or unspecified');
-            }
-
             // do not check headFilters.length cause we still want to use filterNonPathHeadTags
             headTags = filterTagsByPath(includedTags, headFilters, filterNonPathHeadTags);
 
             const headTagsSet = new Set(headTags);
-            const bodyTags = includedTags.filter(
+            let bodyTags = includedTags.filter(
               tag => !headTagsSet.has(tag)
             );
             const additionalTags = this.getAdditionalTags();
@@ -127,10 +154,11 @@ class HtmlWebpackInjectionPlugin {
             headTags = rearrangeInlineStyles(headTags);
             headTags = rearrangePreloadLinks(headTags);
 
-            data.headTags = headTags;
-            data.bodyTags = rearrangeInlineScripts(
-              [...bodyTags, ...additionalTags.body]
-            );
+            bodyTags = [...bodyTags, ...additionalTags.body];
+            bodyTags = rearrangeInlineScripts(bodyTags);
+
+            data.headTags = headTags.map(this.postProcessTag);
+            data.bodyTags = bodyTags.map(this.postProcessTag);
 
             callback(null, data);
           }

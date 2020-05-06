@@ -9,12 +9,12 @@
 
 const path = require('path');
 
-const defineGetters = mappings => Object.keys(mappings)
-  .reduce((acc, propName) => (
-    Object.defineProperty(acc, propName, {
+const defineGetters = mappings => Object.entries(mappings)
+  .reduce((acc, [key, val]) => (
+    Object.defineProperty(acc, key, {
       configurable: false,
       enumerable: true,
-      get: mappings[propName]
+      get: val
     })
   ), {});
 

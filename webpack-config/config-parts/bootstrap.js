@@ -45,8 +45,8 @@ const getFontFaceString = (props, fontSrcs) => {
   let result = '@font-face{';
   let srcString = 'src:';
 
-  Object.keys(props).forEach(
-    key => result += `${key}:${props[key]};`
+  Object.entries(props).forEach(
+    ([prop, val]) => result += `${prop}:${val};`
   );
   fontSrcs.forEach(
     src => srcString += getFontUrlString(src)
@@ -68,4 +68,4 @@ if(!('fonts' in document) && 'head' in document) {
   document.head.appendChild(style);
 }
 
-// TODO: italic
+// TODO: check results

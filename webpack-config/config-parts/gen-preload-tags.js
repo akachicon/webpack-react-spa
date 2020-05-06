@@ -50,7 +50,7 @@ module.exports = (paths, filters) => {
     };
 
     if (attrs.type.split('/')[0] === 'font') {
-      attrs.crossorigin = 'anonymous';
+      attrs.crossorigin = true;
     }
     return createHtmlTagObject('link', attrs);
   });

@@ -54,7 +54,7 @@ config.plugins = config.plugins.filter(
 
 if (config.devServer.hot) {
   config.devServer.writeToDisk =
-    file => new RegExp(`/${htmlFilename}$`, 'g').test(file);
+    file => new RegExp(`/${htmlFilename}$`).test(file);
 }
 
 module.exports = config;
