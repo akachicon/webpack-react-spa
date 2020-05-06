@@ -52,6 +52,20 @@ const rearrangeInlineScripts = tags => {
   return [...nonInlineScriptTags, ...inlineScriptTags];
 };
 
+const rearrangePreloadLinks = tags => {
+  const preloadLinkTags = [];
+  const nonPreloadLinkTags = [];
+
+  for (const tag of tags) {
+    (tag.tagName === 'link'
+        && tag.attributes
+        && tag.attributes.rel === 'preload')
+      ? preloadLinkTags.push(tag)
+      : nonPreloadLinkTags.push(tag);
+  }
+  return [...preloadLinkTags, ...nonPreloadLinkTags];
+};
+
 class HtmlWebpackInjectionPlugin {
   constructor({
     head = [],
@@ -109,9 +123,11 @@ class HtmlWebpackInjectionPlugin {
             additionalTags.head = additionalTags.head || [];
             additionalTags.body = additionalTags.body || [];
 
-            data.headTags = rearrangeInlineStyles(
-              [...headTags, ...additionalTags.head]
-            );
+            headTags = [...headTags, ...additionalTags.head];
+            headTags = rearrangeInlineStyles(headTags);
+            headTags = rearrangePreloadLinks(headTags);
+
+            data.headTags = headTags;
             data.bodyTags = rearrangeInlineScripts(
               [...bodyTags, ...additionalTags.body]
             );

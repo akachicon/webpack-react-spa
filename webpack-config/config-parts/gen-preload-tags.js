@@ -17,7 +17,7 @@ const getAsAttr = path => {
     throw new Error(`'as' attribute value does not exist for .${ext} extension`);
   }
   return attr;
-}
+};
 const getTypeAttr = path => {
   const ext = getExt(path);
   const attr = mimeTypes.lookup(ext);
@@ -26,7 +26,7 @@ const getTypeAttr = path => {
     throw new Error(`'type' attribute value does not exist for .${ext} extension`);
   }
   return attr;
-}
+};
 
 module.exports = (paths, filters) => {
   const filteredPaths = paths.filter(
@@ -41,12 +41,17 @@ module.exports = (paths, filters) => {
       }
     )
   );
-  return filteredPaths.map(
-    path => createHtmlTagObject('link', {
+  return filteredPaths.map(path => {
+    const attrs = {
       rel: 'preload',
       href: path,
       as: getAsAttr(path),
-      type: getTypeAttr(path)
-    })
-  );
+      type: getTypeAttr(path),
+    };
+
+    if (attrs.type.split('/')[0] === 'font') {
+      attrs.crossorigin = 'anonymous';
+    }
+    return createHtmlTagObject('link', attrs);
+  });
 };
