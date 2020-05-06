@@ -38,8 +38,11 @@ const runtimeChunkName = 'runtime';
 
 // It is expected that @styles contains 'fonts' file
 // for webpack to inline it. The file is imported
-// in bootstrap.js.
+// in bootstrap.js. To be able to distinguish the
+// file for inlining we place it in its own chunk
+// with the name of fontFaceChunkName.
 const fontFaceChunkName = 'font-face';
+const fontPreloadRegex = new RegExp('(OpenSans-Bold-latin|OpenSans-Regular-latin).*\\.woff2$');
 
 // Use favicon output prefix path to avoid path rewriting
 // with image optimization plugin.
@@ -81,6 +84,7 @@ module.exports = {
   appGlobals,
   runtimeChunkName,
   fontFaceChunkName,
+  fontPreloadRegex,
   faviconPrefix,
   htmlFilename,
   html,

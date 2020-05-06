@@ -105,7 +105,19 @@ module.exports = {
           }
         ],
       },
-      // TODO: font rule
+      {
+        test: /\.(woff2|woff|ttf|otf|eot)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: env.dev ? '[name].[ext]' : '[name].[contenthash:6].[ext]',
+              outputPath: 'fonts',
+              afterEach: env.prod ? addToFileLoaderStore : undefined
+            }
+          }
+        ]
+      },
       {
         test: /\.(jpe?g|png|webp|svg)$/i,
         use: [
@@ -167,7 +179,6 @@ module.exports = {
     }),
     new HashedChunkIdsPlugin(),
     new ExtractCssChunksPlugin({
-      // filename: env.prod ? '[id].[contenthash:8].css' : '[name].css',
       moduleFilename: (chunkData) => (
         // This is used to allow font-face declaration embedding via style-ext-html-webpack-plugin
         // cause it uses file name to match against.
