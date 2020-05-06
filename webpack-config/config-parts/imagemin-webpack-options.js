@@ -1,4 +1,3 @@
-const ImageminPlugin = require('imagemin-webpack');
 const { faviconPrefix } = require('../../project.config');
 
 // As of time of writing this config webp plugin compresses
@@ -6,7 +5,8 @@ const { faviconPrefix } = require('../../project.config');
 // not change the extensions. If you use other plugins along
 // the way they will get rewritten.
 
-module.exports = new ImageminPlugin({
+// noinspection WebpackConfigHighlighting
+module.exports = {
   test: /.(jpe?g|png|svg)$/i,
   filter: (source, sourcePath) => !sourcePath.match(new RegExp(faviconPrefix)),
   name: '[name].[contenthash:6].[ext]',
@@ -29,16 +29,7 @@ module.exports = new ImageminPlugin({
           errorRecovery: true
         }
       ],
-      // [
-      //   'svgo',
-      //   {
-      //     plugins: [
-      //       {
-      //         removeViewBox: false
-      //       }
-      //     ]
-      //   }
-      // ]
+      // TODO: svgo
     ]
   }
-});
+};

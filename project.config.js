@@ -1,5 +1,12 @@
 // TODO: consider top level option for using css-modules
 
+// This file is intended to
+//
+// - declare the relationships between name pieces which will persist through the app config.
+//
+// - contain general app data. The file is considered as a convenient place to manage
+// general app settings.
+
 const path = require('path');
 
 const defineGetters = mappings => Object.keys(mappings)
@@ -11,13 +18,6 @@ const defineGetters = mappings => Object.keys(mappings)
     })
   ), {});
 
-// This file is intended to
-//
-// - declare the relationships between name pieces which will persist through the app config.
-//
-// - contain general app data. The file is considered as a convenient place to manage
-// general app settings.
-
 const baseDir = __dirname;
 const srcDir = path.join(baseDir, 'src');
 const outDir = path.join(baseDir, 'dist');
@@ -27,6 +27,7 @@ const assetDirJoin = (...files) => path.join(assetDir, ...files);
 
 const pathAliases = {
   '@': srcDir,
+  '@styles': assetDirJoin('styles'),
   '@fonts': assetDirJoin('fonts'),
   '@images': assetDirJoin('images')
 };
@@ -34,6 +35,11 @@ const publicPath = '/';
 const appEntry = path.join(srcDir, 'index.js');
 const appGlobals = {};
 const runtimeChunkName = 'runtime';
+
+// It is expected that @styles contains 'fonts' file
+// for webpack to inline it. The file is imported
+// in bootstrap.js.
+const fontFaceChunkName = 'font-face';
 
 // Use favicon output prefix path to avoid path rewriting
 // with image optimization plugin.
@@ -74,6 +80,7 @@ module.exports = {
   appEntry,
   appGlobals,
   runtimeChunkName,
+  fontFaceChunkName,
   faviconPrefix,
   htmlFilename,
   html,
