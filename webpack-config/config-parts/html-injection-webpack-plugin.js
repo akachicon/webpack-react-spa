@@ -127,7 +127,6 @@ class HtmlWebpackInjectionPlugin {
             } = this;
 
             let includedTags = tags;
-            let headTags = tags;
 
             if (excludeFilters.length) {
               const excludedTags = filterTagsByPath(tags, excludeFilters);
@@ -139,7 +138,7 @@ class HtmlWebpackInjectionPlugin {
             }
 
             // do not check headFilters.length cause we still want to use filterNonPathHeadTags
-            headTags = filterTagsByPath(includedTags, headFilters, filterNonPathHeadTags);
+            let headTags = filterTagsByPath(includedTags, headFilters, filterNonPathHeadTags);
 
             const headTagsSet = new Set(headTags);
             let bodyTags = includedTags.filter(

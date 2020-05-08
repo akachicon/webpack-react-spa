@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const { loader: imageminLoader } = require('imagemin-webpack');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const { CleanWebpackPlugin: CleanPlugin } = require('clean-webpack-plugin');
 const ExtractCssChunksPlugin = require('extract-css-chunks-webpack-plugin');
@@ -20,12 +19,14 @@ const {
   appGlobals,
   runtimeChunkName,
   fontFaceChunkName,
+  cssExtRegexString,
   faviconPrefix,
   env,
   hotCss
 } = require('../project.config.js');
 
 const bootstrapEntry = path.resolve(__dirname, './config-parts/bootstrap.js');
+const fontFaceRegex = new RegExp(`${pathAliases['@styles']}\\/fonts${cssExtRegexString}`);
 
 module.exports = {
   mode: 'none',
@@ -36,7 +37,7 @@ module.exports = {
   output: {
     path: outDir,
     publicPath: publicPath,
-    filename: '[name].js', // [name] should be specified for script inliner to work
+    filename: '[name].js',
     chunkFilename: '[name].js',
     crossOriginLoading: 'anonymous'
   },
@@ -52,7 +53,7 @@ module.exports = {
         loader: 'babel-loader'
       },
       {
-        test: /\.s?css$/i,
+        test: new RegExp(cssExtRegexString, 'i'),
         use: [
           {
             loader: ExtractCssChunksPlugin.loader,
@@ -135,36 +136,38 @@ module.exports = {
     ]
   },
   optimization: {
-    minimize: false,
     noEmitOnErrors: env.dev,
     moduleIds: 'hashed',
+    chunkIds: env.dev, // enable for dev mode; use HashedChunkIds plugin for other environments
     runtimeChunk: {
       name: () => runtimeChunkName
     },
     splitChunks: {
       chunks: 'all',
-      minChunks: 1,
-      minSize: 0,
-      //   minSize: 1024 * 64,
-      //   maxSize: 1024 * 512,
-      //   maxAsyncRequests: 6,
-      //   maxInitialRequests: 6,
+      minSize: 1024 * 30, // 30kb
+      maxSize: 1024 * 200, // 100kb
+      maxAsyncRequests: 30,
+      maxInitialRequests: 30,
       cacheGroups: {
         vendors: false,
         default: false,
+        [fontFaceChunkName]: {
+          test: env.prod ? fontFaceRegex : () => false,
+          name: () => fontFaceChunkName,
+          priority: 20,
+          enforce: true // ignore minSize, maxInitialRequests, and maxAsyncRequests
+        },
+        styles: {
+          test: new RegExp(cssExtRegexString),
+          priority: 10
+        },
         vendor: {
           test: /\/node_modules\//,
           priority: -10
         },
-        [fontFaceChunkName]: {
-          test: new RegExp(`${pathAliases['@styles']}/fonts`),
-          priority: 10
-        },
-        indexGroup: {
-          test: /index|custom/
-        },
-        testGroup: {
-          test: /test-group/
+        common: {
+          reuseExistingChunk: true,
+          priority: -20
         }
       }
     }
@@ -179,13 +182,20 @@ module.exports = {
     }),
     new HashedChunkIdsPlugin(),
     new ExtractCssChunksPlugin({
-      moduleFilename: (chunkData) => (
-        // This is used to allow font-face declaration embedding via style-ext-html-webpack-plugin
-        // cause it uses file name to match against.
-        chunkData.chunk.name === fontFaceChunkName
-          ? '[name].[id].[contenthash:8].js'
-          : '[id].[contenthash:8].js'
-      ),
+      // To allow font-face declaration embedding via style-ext-html-webpack-plugin
+      // we should specify [name] cause the plugin uses file name to match against.
+
+      // moduleFilename: (chunkData) => (
+      //   chunkData.chunk.name === fontFaceChunkName
+      //     ? '[name].[id].[contenthash:8].css'
+      //     : '[id].[contenthash:8].css'
+      // )
+
+      // At the time moduleFilename doesn't work, so we use chunkFilename string
+      // (cause this option doesn't allow function value) with [id] placeholder.
+      // The id for the font-face chunk will be set as fontFaceChunkName (by
+      // hashed-chunk-ids-webpack-plugin).
+      chunkFilename: env.dev ? '[name].css' : '[id].[contenthash:8].css',
     }),
     new HtmlPlugin(htmlPluginOptions),
     new FaviconsPlugin({

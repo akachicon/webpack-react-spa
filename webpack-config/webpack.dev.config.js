@@ -39,7 +39,8 @@ if (config.devServer.watchContentBase) {
   pluginsToExclude.push(CleanPlugin);
 }
 if (devServer.hot) {
-  // Remove HashedChunkIdsPlugin as it throws when compiling html in hmr mode
+  // Remove HashedChunkIdsPlugin as it throws when compiling html in hmr mode.
+  // For the dev mode `optimization.chunkIds: true` is used.
   pluginsToExclude.push(HashedChunkIdsPlugin);
 }
 

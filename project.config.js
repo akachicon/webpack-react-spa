@@ -41,8 +41,17 @@ const runtimeChunkName = 'runtime';
 // in bootstrap.js. To be able to distinguish the
 // file for inlining we place it in its own chunk
 // with the name of fontFaceChunkName.
-const fontFaceChunkName = 'font-face';
+
+// Due to the bug in extract-css-chunks-webpack-plugin
+// we can only use chunkFilename (and not moduleFilename)
+// option for naming chunks. This option only accepts
+// string values. In order to hide module names from
+// generated assets we use [id].[contenthash].css value.
+// Then we set id for the font-face chunk to be fontFaceChunkName.
+// The name is used in regexp, so choose accurately.
+const fontFaceChunkName = '__font-face-chunk__';
 const fontPreloadRegex = new RegExp('(OpenSans-Bold-latin|OpenSans-Regular-latin).*\\.woff2$');
+const cssExtRegexString = '\\.s?css$';
 
 // Use favicon output prefix path to avoid path rewriting
 // with image optimization plugin.
@@ -85,6 +94,7 @@ module.exports = {
   runtimeChunkName,
   fontFaceChunkName,
   fontPreloadRegex,
+  cssExtRegexString,
   faviconPrefix,
   htmlFilename,
   html,

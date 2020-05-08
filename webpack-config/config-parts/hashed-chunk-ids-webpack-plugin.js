@@ -1,4 +1,5 @@
 const { createHash } = require('crypto');
+const { fontFaceChunkName } = require('../../project.config');
 
 class HashedChunkIdsWebpackPlugin {
   constructor(options) {
@@ -17,6 +18,18 @@ class HashedChunkIdsWebpackPlugin {
       compilation.hooks.beforeChunkIds.tap('HashedChunkIdsWebpackPlugin', chunks => {
         chunks.forEach(chunk => {
           if (chunk.id === null) {
+            // In extract-css-chunks-webpack-plugin we use [id].[contenthash].css value for
+            // chunkFilename. We also want to inline font-face chunk via style-ext-html-webpack-plugin,
+            // which uses an asset filename to detect if a chunk should be inlined. For this reason
+            // we set id value for the font-face chunk to be fontFaceChunkName. To identify the chunk
+            // we use its name property set earlier by SplitChunksPlugin.
+            if (chunk.name && chunk.name.includes(fontFaceChunkName)) {
+              chunk.id = fontFaceChunkName;
+              usedIds.add(chunk.id);
+
+              return;
+            }
+
             let modules = [];
 
             if (chunk.getModules) {
