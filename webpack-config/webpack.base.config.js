@@ -5,6 +5,7 @@ const { CleanWebpackPlugin: CleanPlugin } = require('clean-webpack-plugin');
 const ExtractCssChunksPlugin = require('extract-css-chunks-webpack-plugin');
 const HtmlPlugin = require('html-webpack-plugin');
 const FaviconsPlugin = require('favicons-webpack-plugin');
+const regexEscape = require('regex-escape');
 const HashedChunkIdsPlugin = require('./config-parts/hashed-chunk-ids-webpack-plugin');
 const { html  } = require('../project.config');
 const htmlPluginOptions = require('./config-parts/html-webpack-plugin-options');
@@ -26,7 +27,8 @@ const {
 } = require('../project.config.js');
 
 const bootstrapEntry = path.resolve(__dirname, './config-parts/bootstrap.js');
-const fontFaceRegex = new RegExp(`${pathAliases['@styles']}\\/fonts${cssExtRegexString}`);
+const escapedAtStylesPath = regexEscape(pathAliases['@styles']);
+const fontFaceRegex = new RegExp(`${escapedAtStylesPath}\\/fonts${cssExtRegexString}`);
 
 module.exports = {
   mode: 'none',

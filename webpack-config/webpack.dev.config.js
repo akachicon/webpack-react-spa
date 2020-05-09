@@ -1,6 +1,7 @@
 const merge = require('webpack-merge');
 const { HotModuleReplacementPlugin } = require('webpack');
 const { CleanWebpackPlugin: CleanPlugin } = require('clean-webpack-plugin');
+const regexEscape = require('regex-escape');
 const HashedChunkIdsPlugin = require('./config-parts/hashed-chunk-ids-webpack-plugin');
 const baseConfig = require('./webpack.base.config.js');
 const {
@@ -55,7 +56,7 @@ config.plugins = config.plugins.filter(
 
 if (config.devServer.hot) {
   config.devServer.writeToDisk =
-    file => new RegExp(`/${htmlFilename}$`).test(file);
+    file => file.match(`\\/${regexEscape(htmlFilename)}$`);
 }
 
 module.exports = config;
