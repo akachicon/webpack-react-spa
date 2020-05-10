@@ -1,3 +1,4 @@
+const regexEscape = require('regex-escape');
 const { faviconPrefix } = require('../../project.config');
 
 // As of time of writing this config webp plugin compresses
@@ -8,7 +9,7 @@ const { faviconPrefix } = require('../../project.config');
 // noinspection WebpackConfigHighlighting
 module.exports = {
   test: /.(jpe?g|png|svg)$/i,
-  filter: (source, sourcePath) => !sourcePath.match(new RegExp(faviconPrefix)),
+  filter: (source, sourcePath) => !sourcePath.match(regexEscape(faviconPrefix)),
   name: '[name].[contenthash:6].[ext]',
   cache: true,
   imageminOptions: {

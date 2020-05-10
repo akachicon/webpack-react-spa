@@ -140,7 +140,7 @@ module.exports = {
   optimization: {
     noEmitOnErrors: env.dev,
     moduleIds: 'hashed',
-    chunkIds: env.dev, // enable for dev mode; use HashedChunkIds plugin for other environments
+    chunkIds: env.dev ? 'named': false, // enable for dev mode; use HashedChunkIds plugin for other environments
     runtimeChunk: {
       name: () => runtimeChunkName
     },
@@ -154,6 +154,7 @@ module.exports = {
         vendors: false,
         default: false,
         [fontFaceChunkName]: {
+          // TODO: find a way to exclude font-face chunk from js chunks
           test: env.prod ? fontFaceRegex : () => false,
           name: () => fontFaceChunkName,
           priority: 20,

@@ -25,24 +25,23 @@ const config = merge(baseConfig, {
     // write it to the disk and set watchContentBase to be true.
     watchContentBase: devServer.watchContentBase || devServer.hot,
     hot: devServer.hot
-  },
-  plugins: [
+  }
+});
+
+// Remove HashedChunkIdsPlugin as it throws when compiling html in hmr mode.
+// For the dev mode `optimization.chunkIds: 'named'` is used.
+const pluginsToExclude = [HashedChunkIdsPlugin];
+
+if (config.devServer.watchContentBase) {
+  // Remove CleanPlugin to allow serving prebuilt assets from outDir.
+  pluginsToExclude.push(CleanPlugin);
+}
+if (config.devServer.hot) {
+  config.plugins.push(
     new HotModuleReplacementPlugin({
       multistep: true
     })
-  ]
-});
-
-const pluginsToExclude = [];
-
-if (config.devServer.watchContentBase) {
-  // Remove CleanPlugin to allow prebuilt assets to be served from outDir.
-  pluginsToExclude.push(CleanPlugin);
-}
-if (devServer.hot) {
-  // Remove HashedChunkIdsPlugin as it throws when compiling html in hmr mode.
-  // For the dev mode `optimization.chunkIds: true` is used.
-  pluginsToExclude.push(HashedChunkIdsPlugin);
+  );
 }
 
 config.plugins = config.plugins.filter(
