@@ -1,5 +1,7 @@
 // See babel-notes.md for explanation.
 
+const { env, devServer } = require('./project.config');
+
 module.exports = (api) => {
   api.cache.using(() => process.env.NODE_ENV);
 
@@ -16,7 +18,7 @@ module.exports = (api) => {
     '@babel/preset-env',
     {
       modules: false,
-      debug: process.env.NODE_ENV === 'production',
+      debug: env.dev,
       useBuiltIns: 'entry',
       corejs: {
         version: '3.6'
@@ -24,13 +26,19 @@ module.exports = (api) => {
     }
   ];
 
-  return {
-    plugins: [
-      '@babel/plugin-syntax-dynamic-import',
-      pluginTransformRuntime
-    ],
-    presets: [
-      presetEnv
-    ]
-  };
+  const plugins = [
+    '@babel/plugin-syntax-dynamic-import',
+    pluginTransformRuntime,
+  ];
+
+  const presets = [
+    presetEnv,
+    '@babel/preset-react'
+  ];
+
+  if (env.dev && devServer.hot) {
+    plugins.push('react-refresh/babel');
+  }
+
+  return { plugins, presets };
 };

@@ -1,41 +1,12 @@
-import customModule from './custom-module';
-import anotherCustomModule from './another-custom-module';
-import style from './main.scss';
-import imagini from './assets/images/imagini.png'
+import * as React from 'react';
+import { render } from 'react-dom';
+import App from './components/App';
 
-console.log(`hello ${customModule.a}!`);
+render(<App />, document.getElementById('app'));
 
 setTimeout(() => {
-  const appMount = document.getElementsByClassName('app')[0];
-  const span = document.createElement('span');
+  const div = document.createElement('div');
 
-  span.innerText = 'started';
-  appMount.appendChild(span);
-}, 2000);
-
-import(
-  './dynamic-module0'
-  ).then(exports => {
-  console.log(exports);
-});
-
-import(
-  /* webpackChunkName: "dynamic-module2" */
-  './dynamic-module2'
-).then(exports => {
-  console.log(exports);
-});
-
-import(
-  /* webpackChunkName: "dynamic-module" */
-  './dynamic-module'
-).then(exports => {
-  console.log(exports);
-});
-
-class IndexClass {}
-
-const c = new IndexClass();
-const d = new Promise(res => res());
-
-d.then(() => console.log('resolved!'));
+  div.innerText = 'start timeout';
+  document.body.appendChild(div);
+}, 1500);
