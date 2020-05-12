@@ -15,9 +15,11 @@ const OPEN_SANS = 'Open Sans';
 const WEIGHT_BOLD = 700;
 
 const getFontUrlString = fonts => fonts.reduce(
-  (str, font) => {
+  (str, font, idx) => {
     const ext = font.slice(font.lastIndexOf('.') + 1);
-    return str + `url(${font}) format('${ext}'),`
+    const lastUrl = idx === fonts.length - 1;
+
+    return str + `url(${font})format('${ext}')${lastUrl ? '' : ','}`
   },
   ''
 );
@@ -48,24 +50,26 @@ const getFontFaceString = (props, fontSrcs) => {
   Object.entries(props).forEach(
     ([prop, val]) => result += `${prop}:${val};`
   );
-  fontSrcs.forEach(
-    src => srcString += getFontUrlString(src)
-  );
-  srcString += ';';
-  result += '}';
+  srcString += getFontUrlString(fontSrcs) + ';';
+  result += srcString + '}';
 
   return result;
 };
 
 if(!('fonts' in document) && 'head' in document) {
   const style = document.createElement('style');
+  const fontFamily = `'${OPEN_SANS}'`;
 
   style.innerHTML = [
-    getFontFaceString({}, [openSansRegularWoff2, openSansRegularWoff]),
-    getFontFaceString({ weight: WEIGHT_BOLD }, [openSansBoldWoff2, openSansBoldWoff])
-  ].join();
+    getFontFaceString(
+      { 'font-family': fontFamily },
+      [openSansRegularWoff2, openSansRegularWoff]
+    ),
+    getFontFaceString(
+      { 'font-family': fontFamily, weight: WEIGHT_BOLD },
+      [openSansBoldWoff2, openSansBoldWoff]
+    )
+  ].join('');
 
   document.head.appendChild(style);
 }
-
-// TODO: check results

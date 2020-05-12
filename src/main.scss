@@ -2,6 +2,10 @@
 @use './b.scss';
 @use './style/c.scss';
 
+body {
+  font-family: 'Open Sans';
+}
+
 .app-child {
   @include b.b;
   @include c.c;
