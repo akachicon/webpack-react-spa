@@ -5,6 +5,9 @@ const { CleanWebpackPlugin: CleanPlugin } = require('clean-webpack-plugin');
 const ExtractCssChunksPlugin = require('extract-css-chunks-webpack-plugin');
 const HtmlPlugin = require('html-webpack-plugin');
 const FaviconsPlugin = require('favicons-webpack-plugin');
+const postcssMediaMinmax = require('postcss-media-minmax');
+const postcssAutoprefixer = require('autoprefixer');
+const postcssCssnano = require('cssnano');
 const regexEscape = require('regex-escape');
 const HashedChunkIdsPlugin = require('./config-parts/hashed-chunk-ids-webpack-plugin');
 const { html  } = require('../project.config');
@@ -64,12 +67,10 @@ module.exports = {
               // use reloadAll option if hmr doesn't work properly
             },
           },
-          // TODO: postcss loader with optimizations
           {
             loader: 'css-loader',
             options: {
               // For component based approach use modules:
-              // TODO: consider postcss-modules for module approach
               //
               // modules: {
               //   mode: resourcePath => {
@@ -87,6 +88,23 @@ module.exports = {
               //     : '[path][name]__[local]'
               // },
               sourceMap: env.dev
+            }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: [
+                postcssMediaMinmax(),
+                ...(env.prod
+                  ? [
+                      postcssAutoprefixer({
+                        remove: false
+                      }),
+                      postcssCssnano()
+                    ]
+                  : []
+                )
+              ]
             }
           },
           {
@@ -116,7 +134,7 @@ module.exports = {
             options: {
               name: env.dev ? '[name].[ext]' : '[name].[contenthash:6].[ext]',
               outputPath: 'fonts',
-              afterEach: env.prod ? addToFileLoaderStore : undefined
+              afterEach: env.prod ? addToFileLoaderStore : () => {}
             }
           }
         ]
@@ -130,7 +148,7 @@ module.exports = {
               name: env.dev ? '[name].[ext]' : '[name].[contenthash:6].[ext]',
               outputPath: 'images',
               limit: 8 * 1024, // 8kb
-              afterEach: env.prod ? addToFileLoaderStore : undefined
+              afterEach: env.prod ? addToFileLoaderStore : () => {}
             }
           }
         ]
