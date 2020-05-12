@@ -15,8 +15,8 @@
       "not op_mini all"
     ],
     "development": [
-      "chrome last 3 versions",
-      "firefox last 3 versions"
+      "last 3 chrome versions",
+      "last 3 firefox versions"
     ]
   },
   "scripts": {
