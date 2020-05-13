@@ -25,8 +25,7 @@ const {
   fontFaceChunkName,
   cssExtRegexString,
   faviconPrefix,
-  env,
-  hotCss
+  env
 } = require('../project.config.js');
 
 const bootstrapEntry = path.resolve(__dirname, './config-parts/bootstrap.js');
@@ -60,13 +59,20 @@ module.exports = {
       {
         test: new RegExp(cssExtRegexString, 'i'),
         use: [
-          {
-            loader: ExtractCssChunksPlugin.loader,
-            options: {
-              hmr: hotCss,
-              // use reloadAll option if hmr doesn't work properly
-            },
-          },
+          // Use style-loader for dev because of better support for css-modules hmr.
+          env.dev
+            ? {
+                loader: 'style-loader',
+                options: {
+                  esModule: true
+                }
+              }
+            : {
+                loader: ExtractCssChunksPlugin.loader,
+                options: {
+                  esModule: true
+                }
+              },
           {
             loader: 'css-loader',
             options: {
@@ -85,7 +91,7 @@ module.exports = {
               //   exportGlobals: true,
               //   localIdentName: env.prod
               //     ? '[hash:base64:8]'
-              //     : '[path][name]__[local]'
+              //     : '[path]__[name]__[local]'
               // },
               sourceMap: env.dev
             }
@@ -93,6 +99,7 @@ module.exports = {
           {
             loader: 'postcss-loader',
             options: {
+              sourceMap: env.dev,
               plugins: [
                 postcssMediaMinmax(),
                 ...(env.prod
@@ -157,7 +164,7 @@ module.exports = {
   },
   optimization: {
     noEmitOnErrors: env.dev,
-    moduleIds: 'hashed',
+    moduleIds: env.dev ? 'named': 'hashed',
     chunkIds: env.dev ? 'named': false, // enable for dev mode; use HashedChunkIds plugin for other environments
     runtimeChunk: {
       name: () => runtimeChunkName
@@ -173,6 +180,8 @@ module.exports = {
         default: false,
         [fontFaceChunkName]: {
           // TODO: find a way to exclude font-face chunk from js chunks
+          // https://github.com/webpack-contrib/mini-css-extract-plugin/issues/85
+          // https://github.com/webpack/webpack/issues/7300
           test: env.prod ? fontFaceRegex : () => false,
           name: () => fontFaceChunkName,
           priority: 20,
@@ -201,7 +210,6 @@ module.exports = {
       __PROD__: env.prod,
       ...appGlobals,
     }),
-    new HashedChunkIdsPlugin(),
     new ExtractCssChunksPlugin({
       // To allow font-face declaration embedding via style-ext-html-webpack-plugin
       // we should specify [name] cause the plugin uses file name to match against.

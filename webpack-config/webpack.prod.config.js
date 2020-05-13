@@ -5,6 +5,7 @@ const ImageminPlugin = require('imagemin-webpack');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const regexEscape = require('regex-escape');
 const baseConfig = require('./webpack.base.config.js');
+const HashedChunkIdsPlugin = require('./config-parts/hashed-chunk-ids-webpack-plugin');
 const HtmlInjectionPlugin = require('./config-parts/html-injection-webpack-plugin');
 const fileLoaderStore = require('./config-parts/file-loader-store');
 const genPreloadTags = require('./config-parts/gen-preload-tags');
@@ -29,6 +30,7 @@ module.exports = merge(baseConfig, {
     chunkFilename: '[id].[contenthash:8].js'
   },
   plugins: [
+    new HashedChunkIdsPlugin(),
     new ScriptExtHtmlPlugin({
       inline: new RegExp(regexEscape(runtimeChunkName))
     }),

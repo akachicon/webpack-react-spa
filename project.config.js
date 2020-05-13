@@ -76,12 +76,6 @@ const devServer = {
   watchContentBase: true,
   hot: true
 };
-// To be able to run dev-server with css hmr and build dev
-// without 'hot' code used by css loaders/plugins we use
-// CSS_MODE env variable. The only expected value is 'hot'.
-// To avoid several sources of truth we do not define it
-// in the env.
-const hotCss = process.env.CSS_MODE === 'hot';
 
 module.exports = {
   baseDir,
@@ -99,6 +93,5 @@ module.exports = {
   htmlFilename,
   html,
   env,
-  devServer,
-  hotCss
+  devServer
 };

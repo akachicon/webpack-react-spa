@@ -29,9 +29,7 @@ const config = merge(baseConfig, {
   }
 });
 
-// Remove HashedChunkIdsPlugin as it throws when compiling html in hmr mode.
-// For the dev mode `optimization.chunkIds: 'named'` is used.
-const pluginsToExclude = [HashedChunkIdsPlugin];
+const pluginsToExclude = [];
 
 if (config.devServer.watchContentBase) {
   // Remove CleanPlugin to allow serving prebuilt assets from outDir.
