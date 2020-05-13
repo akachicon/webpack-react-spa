@@ -52,6 +52,7 @@ const runtimeChunkName = 'runtime';
 const fontFaceChunkName = '__font-face-chunk__';
 const fontPreloadRegex = new RegExp('(OpenSans-Bold-latin|OpenSans-Regular-latin).*\\.woff2$');
 const cssExtRegexString = '\\.s?css$';
+const enableCssModules = true;
 
 // Use favicon output prefix path to avoid path rewriting
 // with image optimization plugin.
@@ -89,6 +90,7 @@ module.exports = {
   fontFaceChunkName,
   fontPreloadRegex,
   cssExtRegexString,
+  enableCssModules,
   faviconPrefix,
   htmlFilename,
   html,

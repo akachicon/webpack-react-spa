@@ -14,7 +14,7 @@ const {
 
 const config = merge(baseConfig, {
   mode: 'development',
-  devtool: 'eval-source-map',
+  devtool: 'eval-cheap-module-source-map',
   devServer: {
     publicPath,
     contentBase: outDir,

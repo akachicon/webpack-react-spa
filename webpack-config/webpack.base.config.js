@@ -24,6 +24,7 @@ const {
   runtimeChunkName,
   fontFaceChunkName,
   cssExtRegexString,
+  enableCssModules,
   faviconPrefix,
   env
 } = require('../project.config.js');
@@ -76,24 +77,33 @@ module.exports = {
           {
             loader: 'css-loader',
             options: {
-              // For component based approach use modules:
-              //
-              // modules: {
-              //   mode: resourcePath => {
-              //     if (/\.pure.s?css$/i.test(resourcePath)) {
-              //       return 'pure';
-              //     }
-              //     if (/\.global.s?css$/i.test(resourcePath)) {
-              //       return 'global';
-              //     }
-              //     return 'local';
-              //   },
-              //   exportGlobals: true,
-              //   localIdentName: env.prod
-              //     ? '[hash:base64:8]'
-              //     : '[path]__[name]__[local]'
-              // },
-              sourceMap: env.dev
+              sourceMap: env.dev,
+              esModule: true,
+              importLoaders: 2, // postcss-loader, sass-loader
+              modules: enableCssModules
+                ? {
+                    mode: resourcePath => {
+                      const getModeRegex =
+                        mode => new RegExp(`\\.${regexEscape(mode)}${cssExtRegexString}`);
+
+                      const testResourceForMode =
+                        (resource, mode) => getModeRegex(mode).test(resource);
+
+                      if (testResourceForMode(resourcePath, 'pure')) {
+                        return 'pure';
+                      }
+                      if (testResourceForMode(resourcePath, 'global')
+                          || resourcePath.match(escapedAtStylesPath)) {
+                        return 'global';
+                      }
+                      return 'local';
+                    },
+                    exportGlobals: true,
+                    localIdentName: env.prod
+                      ? '[hash:base64:8]'
+                      : '[path]__[name]__[local]'
+                  }
+                : false
             }
           },
           {
