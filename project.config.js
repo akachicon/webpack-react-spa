@@ -20,20 +20,21 @@ const defineGetters = mappings => Object.entries(mappings)
 
 const baseDir = __dirname;
 const srcDir = path.join(baseDir, 'src');
+const serverDir = path.join(srcDir, 'server');
+const clientDir = path.join(srcDir, 'client');
 const outDir = path.join(baseDir, 'dist');
-const assetDir = path.join(srcDir, 'assets');
+const assetDir = path.join(clientDir, 'assets');
 
 const assetDirJoin = (...files) => path.join(assetDir, ...files);
 
 const pathAliases = {
-  '@': srcDir,
+  '@': clientDir,
   '@styles': assetDirJoin('styles'),
   '@fonts': assetDirJoin('fonts'),
   '@images': assetDirJoin('images')
 };
 const publicPath = '/';
-const appEntry = path.join(srcDir, 'index.js');
-const appGlobals = {};
+const appEntry = path.join(clientDir, 'index.js');
 const runtimeChunkName = 'runtime';
 
 // It is expected that @styles contains 'fonts' file
@@ -62,13 +63,17 @@ const htmlFilename = 'index.html'; // output html filename
 const html = {
   title: 'THE APP',
   favicon: path.join(assetDir, 'images', 'favicon.svg'),
-  template: path.join(srcDir, 'index.html'),
+  template: path.join(clientDir, 'index.html'),
   templateParameters: {}
 };
 const env = defineGetters({
   dev: () => process.env.NODE_ENV === 'development',
   prod: () => process.env.NODE_ENV === 'production'
 });
+const appGlobals = {
+  __DEV__: env.dev,
+  __PROD__: env.prod
+};
 const devServer = {
   port: 3030,
   clientLogLevel: 'info',
@@ -80,7 +85,8 @@ const devServer = {
 
 module.exports = {
   baseDir,
-  srcDir,
+  serverDir,
+  clientDir,
   outDir,
   pathAliases,
   publicPath,

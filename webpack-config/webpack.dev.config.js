@@ -3,7 +3,6 @@ const { HotModuleReplacementPlugin } = require('webpack');
 const { CleanWebpackPlugin: CleanPlugin } = require('clean-webpack-plugin');
 const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const regexEscape = require('regex-escape');
-const HashedChunkIdsPlugin = require('./config-parts/hashed-chunk-ids-webpack-plugin');
 const baseConfig = require('./webpack.base.config.js');
 const {
   outDir,

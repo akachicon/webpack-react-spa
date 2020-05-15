@@ -9,7 +9,6 @@ const postcssMediaMinmax = require('postcss-media-minmax');
 const postcssAutoprefixer = require('autoprefixer');
 const postcssCssnano = require('cssnano');
 const regexEscape = require('regex-escape');
-const HashedChunkIdsPlugin = require('./config-parts/hashed-chunk-ids-webpack-plugin');
 const { html  } = require('../project.config');
 const htmlPluginOptions = require('./config-parts/html-webpack-plugin-options');
 const { add: addToFileLoaderStore } = require('./config-parts/file-loader-store');
@@ -216,9 +215,7 @@ module.exports = {
     new FriendlyErrorsPlugin(),
     new CleanPlugin(),
     new webpack.DefinePlugin({
-      __DEV__: env.dev,
-      __PROD__: env.prod,
-      ...appGlobals,
+      ...appGlobals
     }),
     new ExtractCssChunksPlugin({
       // To allow font-face declaration embedding via style-ext-html-webpack-plugin
