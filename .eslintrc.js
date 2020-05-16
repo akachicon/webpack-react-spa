@@ -1,4 +1,7 @@
+const path = require('path');
+const webpackConfig = require('./webpack-config/webpack.base.config');
 const {
+  baseDir,
   clientDir,
   serverDir,
   outDir,
@@ -11,20 +14,58 @@ const clientGlobals = Object.keys(appGlobals).reduce(
     return acc;
   },
   {}
-)
+);
+
+const relativeToBase = argPath => {
+  const isBaseDirAbsolute = path.isAbsolute(baseDir);
+  const isArgPathAbsolute = path.isAbsolute(argPath);
+
+  if (!isBaseDirAbsolute) {
+    throw new Error('base directory has to be absolute');
+  }
+  if (!isArgPathAbsolute) {
+    throw new Error('argument path has to be absolute');
+  }
+  return path.relative(baseDir, argPath);
+};
+
+const relativeServerDir = relativeToBase(serverDir);
+const relativeClientDir = relativeToBase(clientDir);
+const relativeOutDir = relativeToBase(outDir);
 
 module.exports = {
   root: true,
-  ignorePatterns: [`${outDir}/**`],
+  ignorePatterns: [
+    'node_modules/**/*',
+    `${relativeOutDir}/**/*`
+  ],
+  parserOptions: {
+    ecmaVersion: 2018
+  },
+  env: {
+    es2017: true,
+    node: true
+  },
   extends: [
     'eslint:recommended',
     'prettier', // disable general eslint rules that can conflict with prettier
   ],
-  formatters: 'table',
   overrides: [
     {
-      files: [`${clientDir}/**/*.m?jsx?`],
+      files: [`${relativeClientDir}/**/*.@(js|mjs|jsx)`],
+      parserOptions: {
+        ecmaVersion: 2020,
+        sourceType: 'module'
+      },
+      env: {
+        es2020: true,
+        browser: true,
+        node: false
+      },
+      globals: clientGlobals,
       extends: [
+        'plugin:import/errors',
+        'plugin:import/warnings',
         'plugin:react/recommended',
         'plugin:react-hooks/recommended',
         // TODO: investigate eslint-plugin-jsx-a11y
@@ -32,13 +73,24 @@ module.exports = {
         // Disable eslint-plugin-react rules that can conflict with prettier.
         'prettier/react'
       ],
-      env: {
-        browser: true,
-        es2020: true
+      plugins: ['import'],
+      rules: {
+        'no-tabs': 'error',
+        quotes: [
+          'error',
+          'single',
+          {
+            avoidEscape: true,
+            allowTemplateLiterals: false
+          }
+        ]
       },
-      globals: clientGlobals,
-      sourceType: 'module',
       settings: {
+        'import/resolver': {
+          webpack: {
+            config: webpackConfig
+          },
+        },
         react: {
           // TODO: write sensible configs
           // Regex for Component Factory to use, default to 'createReactClass'.
@@ -61,11 +113,7 @@ module.exports = {
       },
     },
     {
-      files: [`${serverDir}/**/*.m?js`],
-      env: {
-        node: true,
-        es2017: true
-      }
+      files: [`${relativeServerDir}/**/*.@(js|mjs)`],
     }
   ]
 };

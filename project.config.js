@@ -1,5 +1,3 @@
-// TODO: consider top level option for using css-modules
-
 // This file is intended to
 //
 // - declare the relationships between name pieces which will persist through the app config.
@@ -29,6 +27,7 @@ const assetDirJoin = (...files) => path.join(assetDir, ...files);
 
 const pathAliases = {
   '@': clientDir,
+  '@app': path.join(clientDir, 'app'),
   '@styles': assetDirJoin('styles'),
   '@fonts': assetDirJoin('fonts'),
   '@images': assetDirJoin('images')
