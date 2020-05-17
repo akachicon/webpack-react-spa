@@ -6,17 +6,17 @@
 // app either font synthesis or fallback font will be used
 // until full versions of fonts are downloaded.
 
-@font-face{
-  font-family: Open Sans;
+@font-face {
+  font-family: 'Open Sans';
+  font-weight: 700;
   src: url(~@fonts/open-sans/OpenSans-Bold-latin.woff2) format('woff2'),
     url(~@fonts/open-sans/OpenSans-Bold-latin.woff) format('woff');
-  font-weight: 700;
   font-display: swap;
 }
 @font-face {
-  font-family: Open Sans;
+  font-family: 'Open Sans';
+  font-weight: 400;
   src: url(~@fonts/open-sans/OpenSans-Regular-latin.woff2) format('woff2'),
     url(~@fonts/open-sans/OpenSans-Regular-latin.woff) format('woff');
-  font-weight: 400;
   font-display: swap;
 }

@@ -9,12 +9,15 @@ const postcssMediaMinmax = require('postcss-media-minmax');
 const postcssAutoprefixer = require('autoprefixer');
 const postcssCssnano = require('cssnano');
 const regexEscape = require('regex-escape');
-const { html  } = require('../project.config');
+const { html } = require('../project.config');
 const htmlPluginOptions = require('./config-parts/html-webpack-plugin-options');
-const { add: addToFileLoaderStore } = require('./config-parts/file-loader-store');
+const {
+  add: addToFileLoaderStore,
+} = require('./config-parts/file-loader-store');
 
 const {
   baseDir,
+  clientDir,
   outDir,
   pathAliases,
   publicPath,
@@ -25,36 +28,38 @@ const {
   cssExtRegexString,
   enableCssModules,
   faviconPrefix,
-  env
+  env,
 } = require('../project.config.js');
 
-const bootstrapEntry = path.resolve(__dirname, './config-parts/bootstrap.js');
+const bootstrapEntry = path.resolve(clientDir, 'bootstrap.js');
 const escapedAtStylesPath = regexEscape(pathAliases['@styles']);
-const fontFaceRegex = new RegExp(`${escapedAtStylesPath}\\/fonts${cssExtRegexString}`);
+const fontFaceRegex = new RegExp(
+  `${escapedAtStylesPath}\\/fonts${cssExtRegexString}`
+);
 
 module.exports = {
   mode: 'none',
   context: baseDir,
   entry: {
-    main: [bootstrapEntry, appEntry]
+    main: [bootstrapEntry, appEntry],
   },
   output: {
     path: outDir,
     publicPath: publicPath,
     filename: '[name].js',
     chunkFilename: '[name].js',
-    crossOriginLoading: 'anonymous'
+    crossOriginLoading: 'anonymous',
   },
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.scss', '.css'],
-    alias: pathAliases
+    alias: pathAliases,
   },
   module: {
     rules: [
       {
         test: /\.jsx?$/i,
         exclude: /node_modules/,
-        loader: 'babel-loader'
+        loader: 'babel-loader',
       },
       {
         test: new RegExp(cssExtRegexString, 'i'),
@@ -64,14 +69,14 @@ module.exports = {
             ? {
                 loader: 'style-loader',
                 options: {
-                  esModule: true
-                }
+                  esModule: true,
+                },
               }
             : {
                 loader: ExtractCssChunksPlugin.loader,
                 options: {
-                  esModule: true
-                }
+                  esModule: true,
+                },
               },
           {
             loader: 'css-loader',
@@ -81,18 +86,22 @@ module.exports = {
               importLoaders: 2, // postcss-loader, sass-loader
               modules: enableCssModules
                 ? {
-                    mode: resourcePath => {
-                      const getModeRegex =
-                        mode => new RegExp(`\\.${regexEscape(mode)}${cssExtRegexString}`);
+                    mode: (resourcePath) => {
+                      const getModeRegex = (mode) =>
+                        new RegExp(
+                          `\\.${regexEscape(mode)}${cssExtRegexString}`
+                        );
 
-                      const testResourceForMode =
-                        (resource, mode) => getModeRegex(mode).test(resource);
+                      const testResourceForMode = (resource, mode) =>
+                        getModeRegex(mode).test(resource);
 
                       if (testResourceForMode(resourcePath, 'pure')) {
                         return 'pure';
                       }
-                      if (testResourceForMode(resourcePath, 'global')
-                          || resourcePath.match(escapedAtStylesPath)) {
+                      if (
+                        testResourceForMode(resourcePath, 'global') ||
+                        resourcePath.match(escapedAtStylesPath)
+                      ) {
                         return 'global';
                       }
                       return 'local';
@@ -100,10 +109,10 @@ module.exports = {
                     exportGlobals: true,
                     localIdentName: env.prod
                       ? '[hash:base64:8]'
-                      : '[path]__[name]__[local]'
+                      : '[path]__[name]__[local]',
                   }
-                : false
-            }
+                : false,
+            },
           },
           {
             loader: 'postcss-loader',
@@ -114,20 +123,19 @@ module.exports = {
                 ...(env.prod
                   ? [
                       postcssAutoprefixer({
-                        remove: false
+                        remove: false,
                       }),
-                      postcssCssnano()
+                      postcssCssnano(),
                     ]
-                  : []
-                )
-              ]
-            }
+                  : []),
+              ],
+            },
           },
           {
             loader: 'resolve-url-loader',
             options: {
-              sourceMap: env.dev
-            }
+              sourceMap: env.dev,
+            },
           },
           {
             loader: 'sass-loader',
@@ -136,10 +144,10 @@ module.exports = {
                 // source maps are necessary for resolve-url-loader to work
                 sourceMap: true,
                 // speed up dart-sass compilation using fibers according to the docs
-                fiber: require('fibers')
-              }
-            }
-          }
+                fiber: require('fibers'),
+              },
+            },
+          },
         ],
       },
       {
@@ -150,10 +158,10 @@ module.exports = {
             options: {
               name: env.dev ? '[name].[ext]' : '[name].[contenthash:6].[ext]',
               outputPath: 'fonts',
-              afterEach: env.prod ? addToFileLoaderStore : () => {}
-            }
-          }
-        ]
+              afterEach: env.prod ? addToFileLoaderStore : () => {},
+            },
+          },
+        ],
       },
       {
         test: /\.(jpe?g|png|webp|svg)$/i,
@@ -164,19 +172,19 @@ module.exports = {
               name: env.dev ? '[name].[ext]' : '[name].[contenthash:6].[ext]',
               outputPath: 'images',
               limit: 8 * 1024, // 8kb
-              afterEach: env.prod ? addToFileLoaderStore : () => {}
-            }
-          }
-        ]
-      }
-    ]
+              afterEach: env.prod ? addToFileLoaderStore : () => {},
+            },
+          },
+        ],
+      },
+    ],
   },
   optimization: {
     noEmitOnErrors: env.dev,
-    moduleIds: env.dev ? 'named': 'hashed',
-    chunkIds: env.dev ? 'named': false, // enable for dev mode; use HashedChunkIds plugin for other environments
+    moduleIds: env.dev ? 'named' : 'hashed',
+    chunkIds: env.dev ? 'named' : false, // enable for dev mode; use HashedChunkIds plugin for other environments
     runtimeChunk: {
-      name: () => runtimeChunkName
+      name: () => runtimeChunkName,
     },
     splitChunks: {
       chunks: 'all',
@@ -194,28 +202,28 @@ module.exports = {
           test: env.prod ? fontFaceRegex : () => false,
           name: () => fontFaceChunkName,
           priority: 20,
-          enforce: true // ignore minSize, maxInitialRequests, and maxAsyncRequests
+          enforce: true, // ignore minSize, maxInitialRequests, and maxAsyncRequests
         },
         styles: {
           test: new RegExp(cssExtRegexString),
-          priority: 10
+          priority: 10,
         },
         vendor: {
           test: /\/node_modules\//,
-          priority: -10
+          priority: -10,
         },
         common: {
           reuseExistingChunk: true,
-          priority: -20
-        }
-      }
-    }
+          priority: -20,
+        },
+      },
+    },
   },
   plugins: [
     new FriendlyErrorsPlugin(),
     new CleanPlugin(),
     new webpack.DefinePlugin({
-      ...appGlobals
+      ...appGlobals,
     }),
     new ExtractCssChunksPlugin({
       // To allow font-face declaration embedding via style-ext-html-webpack-plugin
@@ -247,9 +255,9 @@ module.exports = {
           favicons: true,
           firefox: true,
           windows: true,
-          yandex: false
-        }
-      }
-    })
-  ]
+          yandex: false,
+        },
+      },
+    }),
+  ],
 };

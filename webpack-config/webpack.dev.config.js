@@ -8,7 +8,7 @@ const {
   outDir,
   publicPath,
   htmlFilename,
-  devServer
+  devServer,
 } = require('../project.config');
 
 const config = merge(baseConfig, {
@@ -24,8 +24,8 @@ const config = merge(baseConfig, {
     // To reload html automatically in hmr mode we
     // write it to the disk and set watchContentBase to be true.
     watchContentBase: devServer.watchContentBase || devServer.hot,
-    hot: devServer.hot
-  }
+    hot: devServer.hot,
+  },
 });
 
 const pluginsToExclude = [];
@@ -37,24 +37,22 @@ if (config.devServer.watchContentBase) {
 if (config.devServer.hot) {
   config.plugins.push(
     new HotModuleReplacementPlugin({
-      multistep: true
+      multistep: true,
     }),
     new ReactRefreshPlugin()
   );
 }
 
-config.plugins = config.plugins.filter(
-  plugin => {
-    const exclude = pluginsToExclude.some(
-      excludedPlugin => plugin instanceof excludedPlugin
-    );
-    return !exclude;
-  }
-);
+config.plugins = config.plugins.filter((plugin) => {
+  const exclude = pluginsToExclude.some(
+    (excludedPlugin) => plugin instanceof excludedPlugin
+  );
+  return !exclude;
+});
 
 if (config.devServer.hot) {
-  config.devServer.writeToDisk =
-    file => file.match(`\\/${regexEscape(htmlFilename)}$`);
+  config.devServer.writeToDisk = (file) =>
+    file.match(`\\/${regexEscape(htmlFilename)}$`);
 }
 
 module.exports = config;

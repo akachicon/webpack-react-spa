@@ -7,14 +7,16 @@
 
 const path = require('path');
 
-const defineGetters = mappings => Object.entries(mappings)
-  .reduce((acc, [key, val]) => (
-    Object.defineProperty(acc, key, {
-      configurable: false,
-      enumerable: true,
-      get: val
-    })
-  ), {});
+const defineGetters = (mappings) =>
+  Object.entries(mappings).reduce(
+    (acc, [key, val]) =>
+      Object.defineProperty(acc, key, {
+        configurable: false,
+        enumerable: true,
+        get: val,
+      }),
+    {}
+  );
 
 const baseDir = __dirname;
 const srcDir = path.join(baseDir, 'src');
@@ -30,7 +32,7 @@ const pathAliases = {
   '@app': path.join(clientDir, 'app'),
   '@styles': assetDirJoin('styles'),
   '@fonts': assetDirJoin('fonts'),
-  '@images': assetDirJoin('images')
+  '@images': assetDirJoin('images'),
 };
 const publicPath = '/';
 const appEntry = path.join(clientDir, 'index.js');
@@ -50,7 +52,9 @@ const runtimeChunkName = 'runtime';
 // Then we set id for the font-face chunk to be fontFaceChunkName.
 // The name is used in regexp, so choose accurately.
 const fontFaceChunkName = '__font-face-chunk__';
-const fontPreloadRegex = new RegExp('(OpenSans-Bold-latin|OpenSans-Regular-latin).*\\.woff2$');
+const fontPreloadRegex = new RegExp(
+  '(OpenSans-Bold-latin|OpenSans-Regular-latin).*\\.woff2$'
+);
 const cssExtRegexString = '\\.s?css$';
 const enableCssModules = true;
 
@@ -63,15 +67,15 @@ const html = {
   title: 'THE APP',
   favicon: path.join(assetDir, 'images', 'favicon.svg'),
   template: path.join(clientDir, 'index.html'),
-  templateParameters: {}
+  templateParameters: {},
 };
 const env = defineGetters({
   dev: () => process.env.NODE_ENV === 'development',
-  prod: () => process.env.NODE_ENV === 'production'
+  prod: () => process.env.NODE_ENV === 'production',
 });
 const appGlobals = {
   __DEV__: env.dev,
-  __PROD__: env.prod
+  __PROD__: env.prod,
 };
 const devServer = {
   port: 3030,
@@ -79,7 +83,7 @@ const devServer = {
   // watchContentBase will be forced to be true in hmr mode,
   // this way we can reload html automatically.
   watchContentBase: true,
-  hot: true
+  hot: true,
 };
 
 module.exports = {
@@ -100,5 +104,5 @@ module.exports = {
   htmlFilename,
   html,
   env,
-  devServer
+  devServer,
 };

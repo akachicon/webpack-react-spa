@@ -5,18 +5,15 @@ const {
   clientDir,
   serverDir,
   outDir,
-  appGlobals
+  appGlobals,
 } = require('./project.config');
 
-const clientGlobals = Object.keys(appGlobals).reduce(
-  (acc, global) => {
-    acc[global] = 'readonly';
-    return acc;
-  },
-  {}
-);
+const clientGlobals = Object.keys(appGlobals).reduce((acc, global) => {
+  acc[global] = 'readonly';
+  return acc;
+}, {});
 
-const relativeToBase = argPath => {
+const relativeToBase = (argPath) => {
   const isBaseDirAbsolute = path.isAbsolute(baseDir);
   const isArgPathAbsolute = path.isAbsolute(argPath);
 
@@ -35,16 +32,13 @@ const relativeOutDir = relativeToBase(outDir);
 
 module.exports = {
   root: true,
-  ignorePatterns: [
-    'node_modules/**/*',
-    `${relativeOutDir}/**/*`
-  ],
+  ignorePatterns: ['node_modules/**/*', `${relativeOutDir}/**/*`],
   parserOptions: {
-    ecmaVersion: 2018
+    ecmaVersion: 2018,
   },
   env: {
     es2017: true,
-    node: true
+    node: true,
   },
   extends: [
     'eslint:recommended',
@@ -55,12 +49,12 @@ module.exports = {
       files: [`${relativeClientDir}/**/*.@(js|mjs|jsx)`],
       parserOptions: {
         ecmaVersion: 2020,
-        sourceType: 'module'
+        sourceType: 'module',
       },
       env: {
         es2020: true,
         browser: true,
-        node: false
+        node: false,
       },
       globals: clientGlobals,
       extends: [
@@ -68,10 +62,10 @@ module.exports = {
         'plugin:import/warnings',
         'plugin:react/recommended',
         'plugin:react-hooks/recommended',
-        // TODO: investigate eslint-plugin-jsx-a11y
+        // TODO: eslint-plugin-jsx-a11y
 
         // Disable eslint-plugin-react rules that can conflict with prettier.
-        'prettier/react'
+        'prettier/react',
       ],
       plugins: ['import'],
       rules: {
@@ -80,8 +74,8 @@ module.exports = {
           'single',
           {
             avoidEscape: true,
-            allowTemplateLiterals: false
-          }
+            allowTemplateLiterals: false,
+          },
         ],
         'lines-around-comment': [
           'error',
@@ -95,14 +89,14 @@ module.exports = {
             allowArrayStart: true,
             allowArrayEnd: true,
             allowClassStart: true,
-            allowClassEnd: true
-          }
-        ]
+            allowClassEnd: true,
+          },
+        ],
       },
       settings: {
         'import/resolver': {
           webpack: {
-            config: webpackConfig
+            config: webpackConfig,
           },
         },
         react: {
@@ -110,24 +104,24 @@ module.exports = {
           // Regex for Component Factory to use, default to 'createReactClass'.
           createClass: 'createReactClass',
           pragma: 'React',
-          version: 'detect'
+          version: 'detect',
         },
         propWrapperFunctions: [
           // The names of any function used to wrap propTypes, e.g. `forbidExtraProps`.
           // If this isn't set, any propTypes wrapped in a function will be skipped.
           'forbidExtraProps',
           { property: 'freeze', object: 'Object' },
-          { property: 'myFavoriteWrapper' }
+          { property: 'myFavoriteWrapper' },
         ],
         linkComponents: [
           // Components used as alternatives to <a> for linking, eg. <Link to={ url } />.
           'Hyperlink',
-          { name: 'Link', linkAttribute: 'to' }
-        ]
+          { name: 'Link', linkAttribute: 'to' },
+        ],
       },
     },
     {
       files: [`${relativeServerDir}/**/*.@(js|mjs)`],
-    }
-  ]
+    },
+  ],
 };

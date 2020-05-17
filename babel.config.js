@@ -10,8 +10,8 @@ module.exports = (api) => {
     {
       regenerator: false,
       useESModules: true,
-      version: '^7.8.4'
-    }
+      version: '^7.8.4',
+    },
   ];
 
   const presetEnv = [
@@ -21,19 +21,14 @@ module.exports = (api) => {
       debug: env.dev,
       useBuiltIns: 'entry',
       corejs: {
-        version: '3.6'
-      }
-    }
+        version: '3.6',
+      },
+    },
   ];
 
-  const plugins = [
-    pluginTransformRuntime,
-  ];
+  const plugins = [pluginTransformRuntime];
 
-  const presets = [
-    presetEnv,
-    '@babel/preset-react'
-  ];
+  const presets = [presetEnv, '@babel/preset-react'];
 
   if (env.dev && devServer.hot) {
     plugins.push('react-refresh/babel');

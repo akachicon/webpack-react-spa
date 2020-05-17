@@ -1,22 +1,14 @@
 const rationalOrder = require('stylelint-rational-order');
 
 module.exports = {
-  ignoreFiles: [
-    '!*.css',
-    '!*.scss'
-  ],
-  extends: [
-    'stylelint-config-recommended-scss'
-  ],
-  plugins: [
-    'stylelint-scss',
-    'stylelint-order'
-  ],
+  ignoreFiles: ['!**/*.css', '!**/*.scss'],
+  extends: ['stylelint-config-recommended-scss'],
+  plugins: ['stylelint-scss', 'stylelint-order'],
   rules: {
     'order/order': [
       {
         type: 'at-rule',
-        hasBlock: false
+        hasBlock: false,
       },
       'dollar-variables',
       'custom-properties',
@@ -24,9 +16,9 @@ module.exports = {
       'rules',
       {
         type: 'at-rule',
-        hasBlock: true
-      }
+        hasBlock: true,
+      },
     ],
-    'order/properties-order': rationalOrder()
-  }
-}
+    'order/properties-order': rationalOrder(),
+  },
+};

@@ -17,8 +17,8 @@ module.exports = {
       [
         'jpegtran',
         {
-          progressive: true
-        }
+          progressive: true,
+        },
       ],
       [
         'optipng',
@@ -27,10 +27,10 @@ module.exports = {
           bitDepthReduction: false,
           colorTypeReduction: false,
           interlaced: true,
-          errorRecovery: true
-        }
+          errorRecovery: true,
+        },
       ],
       // TODO: svgo
-    ]
-  }
+    ],
+  },
 };
