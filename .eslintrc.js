@@ -75,13 +75,27 @@ module.exports = {
       ],
       plugins: ['import'],
       rules: {
-        'no-tabs': 'error',
         quotes: [
           'error',
           'single',
           {
             avoidEscape: true,
             allowTemplateLiterals: false
+          }
+        ],
+        'lines-around-comment': [
+          'error',
+          {
+            beforeBlockComment: true,
+            beforeLineComment: true,
+            allowBlockStart: true,
+            allowBlockEnd: true,
+            allowObjectStart: true,
+            allowObjectEnd: true,
+            allowArrayStart: true,
+            allowArrayEnd: true,
+            allowClassStart: true,
+            allowClassEnd: true
           }
         ]
       },

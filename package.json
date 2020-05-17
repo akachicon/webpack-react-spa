@@ -24,8 +24,14 @@
     "build:dev": "cross-env NODE_ENV=development webpack --config ./webpack-config/webpack.dev.config.js",
     "build:prod": "cross-env NODE_ENV=production webpack --config ./webpack-config/webpack.prod.config.js",
     "serve:dev-server": "cross-env NODE_ENV=development webpack-dev-server --config ./webpack-config/webpack.dev.config.js",
-    "lint:eslint": "eslint -f table --cache-location ./node_modules/.cache/eslint/ .",
+    "lint:prettier": "prettier --check \"./**/*.(js|mjs|jsx|css|scss)\"",
+    "lint:prettier:fix": "prettier --write \"./**/*.(js|mjs|jsx|css|scss)\"",
+    "lint:eslint": "eslint --ext .js,.mjs,.jsx --format table --cache-location ./node_modules/.cache/eslint/ .",
+    "lint:eslint:fix": "npm run lint:eslint -- --fix",
     "lint:stylelint": "stylelint --cache --cacheLocation=./node_modules/.cache/stylelint/ ./src",
+    "lint:stylelint:fix": "npm run lint:stylelint -- --fix",
+    "lint:check": "npm run lint:prettier && npm run lint:eslint && npm run lint:stylelint",
+    "lint:fix": "npm run lint:prettier:fix && npm run lint:eslint:fix && npm run lint:stylelint:fix",
     "clear:cache": "rm -rf ./node_modules/.cache"
   },
   "devDependencies": {
@@ -61,6 +67,7 @@
     "mime-types": "^2.1.27",
     "postcss-loader": "^3.0.0",
     "postcss-media-minmax": "^4.0.0",
+    "prettier": "^2.0.5",
     "react-refresh": "^0.8.2",
     "regex-escape": "^3.4.9",
     "resolve-url-loader": "^3.1.1",

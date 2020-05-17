@@ -1,6 +1,3 @@
 /node_modules/
 /dist/
 /.idea/
-/logs
-*.log
-npm-debug.log*
