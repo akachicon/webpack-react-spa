@@ -11,6 +11,7 @@ const fileLoaderStore = require('./config-parts/file-loader-store');
 const genPreloadTags = require('./config-parts/gen-preload-tags');
 const imageminPluginOptions = require('./config-parts/imagemin-webpack-options');
 const {
+  bundleAnalyzerReportPath,
   runtimeChunkName,
   fontFaceChunkName,
   fontPreloadRegex,
@@ -64,7 +65,8 @@ module.exports = merge(baseConfig, {
     }),
     new ImageminPlugin(imageminPluginOptions),
     new BundleAnalyzerPlugin({
-      analyzerMode: 'server',
+      analyzerMode: 'static',
+      reportFilename: bundleAnalyzerReportPath,
     }),
   ],
 });

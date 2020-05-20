@@ -85,6 +85,10 @@ const devServer = {
   watchContentBase: true,
   hot: true,
 };
+const bundleAnalyzerReportPath = path.join(
+  baseDir,
+  'bundle-analyzer.report.html'
+);
 
 module.exports = {
   baseDir,
@@ -105,4 +109,5 @@ module.exports = {
   html,
   env,
   devServer,
+  bundleAnalyzerReportPath,
 };
