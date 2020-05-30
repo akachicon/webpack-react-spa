@@ -1,23 +1,8 @@
-import * as React from 'react';
-import ClassDefault from './ClassDefault';
-import { ClassNamed } from './ClassNamed';
-import FunctionDefault from './FunctionDefault';
-import { FunctionNamed } from './FunctionNamed';
-
-const LazyComponent = React.lazy(() => import('./LazyComponent'));
+import React from 'react';
+import stl from './app.scss';
 
 function App() {
-  return (
-    <div>
-      <ClassDefault />
-      <ClassNamed />
-      <FunctionDefault />
-      <FunctionNamed />
-      <React.Suspense fallback={<h1>Loading</h1>}>
-        <LazyComponent />
-      </React.Suspense>
-    </div>
-  );
+  return <div className={stl.app}>Welcome to react world, hot!</div>;
 }
 
 export default App;

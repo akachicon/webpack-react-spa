@@ -60,6 +60,9 @@ module.exports = {
         test: /\.jsx?$/i,
         exclude: /node_modules/,
         loader: 'babel-loader',
+        options: {
+          cacheDirectory: env.dev,
+        },
       },
       {
         test: new RegExp(cssExtRegexString, 'i'),
