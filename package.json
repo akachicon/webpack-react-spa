@@ -25,6 +25,12 @@
     }
   },
   "scripts": {
+    "gen:tsconfig": "node ./tsconfig-generator.js",
+    "check-types": "tsc",
+    "prebuild:base": "npm run gen:tsconfig",
+    "prebuild:dev": "npm run gen:tsconfig",
+    "prebuild:prod": "npm run gen:tsconfig",
+    "preserve:dev": "npm run gen:tsconfig",
     "build:base": "webpack --config ./webpack-config/webpack.base.config.js",
     "build:dev": "cross-env NODE_ENV=development webpack --config ./webpack-config/webpack.dev.config.js",
     "build:prod": "cross-env NODE_ENV=production webpack --config ./webpack-config/webpack.prod.config.js",

@@ -34,7 +34,7 @@ const {
 const bootstrapEntry = path.resolve(clientDir, 'bootstrap.js');
 const escapedAtStylesPath = regexEscape(pathAliases['@styles']);
 const fontFaceRegex = new RegExp(
-  `${escapedAtStylesPath}\\/fonts${cssExtRegexString}`
+  `${escapedAtStylesPath}\\${path.sep}fonts${cssExtRegexString}`
 );
 
 module.exports = {

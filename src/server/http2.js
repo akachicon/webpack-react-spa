@@ -59,7 +59,7 @@ function respondToStreamError(err, stream) {
 server.on('stream', (stream, headers) => {
   const reqPath = headers[HTTP2_HEADER_PATH];
   let responseMimeType = mime.lookup(reqPath);
-  let fullPath = path.join(serverRoot, reqPath);
+  let fullPath = path.join(serverRoot, reqPath.replace(/\//g, path.sep));
 
   if (!mime.lookup(fullPath)) {
     fullPath = indexPath;

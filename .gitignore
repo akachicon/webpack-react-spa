@@ -1,4 +1,5 @@
 /node_modules/
+/tsconfig.json
 /dist/
 /ssl/**/*.key
 /ssl/**/*.pem

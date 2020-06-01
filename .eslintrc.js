@@ -26,9 +26,11 @@ const relativeToBase = (argPath) => {
   return path.relative(baseDir, argPath);
 };
 
-const relativeServerDir = relativeToBase(serverDir);
-const relativeClientDir = relativeToBase(clientDir);
-const relativeOutDir = relativeToBase(outDir);
+const replaceBackslash = (str) => str.replace(/\\/g, '/');
+
+const relativeServerDir = replaceBackslash(relativeToBase(serverDir));
+const relativeClientDir = replaceBackslash(relativeToBase(clientDir));
+const relativeOutDir = replaceBackslash(relativeToBase(outDir));
 
 module.exports = {
   root: true,

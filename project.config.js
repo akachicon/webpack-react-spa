@@ -6,6 +6,7 @@
 // general app settings.
 
 const path = require('path');
+const join = (...args) => path.join(...args);
 
 const defineGetters = (mappings) =>
   Object.entries(mappings).reduce(
@@ -19,23 +20,23 @@ const defineGetters = (mappings) =>
   );
 
 const baseDir = __dirname;
-const srcDir = path.join(baseDir, 'src');
-const serverDir = path.join(srcDir, 'server');
-const clientDir = path.join(srcDir, 'client');
-const outDir = path.join(baseDir, 'dist');
-const assetDir = path.join(clientDir, 'assets');
+const srcDir = join(baseDir, 'src');
+const serverDir = join(srcDir, 'server');
+const clientDir = join(srcDir, 'client');
+const outDir = join(baseDir, 'dist');
+const assetDir = join(clientDir, 'assets');
 
-const assetDirJoin = (...files) => path.join(assetDir, ...files);
+const assetDirJoin = (...files) => join(assetDir, ...files);
 
 const pathAliases = {
   '@': clientDir,
-  '@app': path.join(clientDir, 'app'),
+  '@app': join(clientDir, 'app'),
   '@styles': assetDirJoin('styles'),
   '@fonts': assetDirJoin('fonts'),
   '@images': assetDirJoin('images'),
 };
 const publicPath = '/';
-const appEntry = path.join(clientDir, 'index.js');
+const appEntry = join(clientDir, 'index.js');
 const runtimeChunkName = 'runtime';
 
 // It is expected that @styles contains 'fonts' file
@@ -60,13 +61,14 @@ const enableCssModules = true;
 
 // Use favicon output prefix path to avoid path rewriting
 // with image optimization plugin.
+// TODO: check win
 const faviconPrefix = 'favicon/';
 
 const htmlFilename = 'index.html'; // output html filename
 const html = {
   title: 'THE APP',
-  favicon: path.join(assetDir, 'images', 'favicon.svg'),
-  template: path.join(clientDir, 'index.html'),
+  favicon: join(assetDir, 'images', 'favicon.svg'),
+  template: join(clientDir, 'index.html'),
   templateParameters: {},
 };
 const env = defineGetters({
@@ -85,10 +87,7 @@ const devServer = {
   watchContentBase: true,
   hot: true,
 };
-const bundleAnalyzerReportPath = path.join(
-  baseDir,
-  'bundle-analyzer.report.html'
-);
+const bundleAnalyzerReportPath = join(baseDir, 'bundle-analyzer.report.html');
 
 module.exports = {
   baseDir,

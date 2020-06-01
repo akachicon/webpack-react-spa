@@ -1,3 +1,4 @@
+const path = require('path');
 const merge = require('webpack-merge');
 const { HotModuleReplacementPlugin } = require('webpack');
 const { CleanWebpackPlugin: CleanPlugin } = require('clean-webpack-plugin');
@@ -52,7 +53,7 @@ config.plugins = config.plugins.filter((plugin) => {
 
 if (config.devServer.hot) {
   config.devServer.writeToDisk = (file) =>
-    file.match(`\\/${regexEscape(htmlFilename)}$`);
+    file.match(`\\${path.sep}${regexEscape(htmlFilename)}$`);
 }
 
 module.exports = config;
