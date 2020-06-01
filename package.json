@@ -45,10 +45,12 @@
     "clear:cache:linter": "rimraf ./node_modules/.cache/linter/"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.6",
+    "@babel/core": "^7.10.2",
+    "@babel/plugin-proposal-class-properties": "^7.10.1",
     "@babel/plugin-transform-runtime": "^7.8.3",
-    "@babel/preset-env": "^7.8.6",
+    "@babel/preset-env": "^7.10.1",
     "@babel/preset-react": "^7.9.4",
+    "@babel/preset-typescript": "^7.10.1",
     "@pmmmwh/react-refresh-webpack-plugin": "github:pmmmwh/react-refresh-webpack-plugin",
     "autoprefixer": "^9.7.6",
     "babel-loader": "^8.0.6",
@@ -94,6 +96,7 @@
     "stylelint-order": "^4.0.0",
     "stylelint-rational-order": "github:akachicon/stylelint-rational-order",
     "stylelint-scss": "^3.17.1",
+    "typescript": "^3.9.3",
     "url-loader": "^4.0.0",
     "webpack": "^4.41.6",
     "webpack-bundle-analyzer": "^3.7.0",

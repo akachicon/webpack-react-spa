@@ -51,13 +51,13 @@ module.exports = {
     crossOriginLoading: 'anonymous',
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.json', '.scss', '.css'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.scss', '.css'],
     alias: pathAliases,
   },
   module: {
     rules: [
       {
-        test: /\.jsx?$/i,
+        test: /\.[j,t]sx?$/i,
         exclude: /node_modules/,
         loader: 'babel-loader',
         options: {
