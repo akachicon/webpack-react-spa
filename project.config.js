@@ -25,6 +25,7 @@ const serverDir = join(srcDir, 'server');
 const clientDir = join(srcDir, 'client');
 const outDir = join(baseDir, 'dist');
 const assetDir = join(clientDir, 'assets');
+const cacheDir = join(baseDir, 'node_modules', '.cache');
 
 const assetDirJoin = (...files) => join(assetDir, ...files);
 
@@ -35,6 +36,11 @@ const pathAliases = {
   '@fonts': assetDirJoin('fonts'),
   '@images': assetDirJoin('images'),
 };
+// TODO: check win
+Object.entries(pathAliases).forEach(([alias, aliasPath]) => {
+  pathAliases[alias] = aliasPath.replace(/\\/g, '/');
+});
+
 const publicPath = '/';
 const appEntry = join(clientDir, 'index.js');
 const runtimeChunkName = 'runtime';
@@ -94,6 +100,7 @@ module.exports = {
   serverDir,
   clientDir,
   outDir,
+  cacheDir,
   pathAliases,
   publicPath,
   appEntry,

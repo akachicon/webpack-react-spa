@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "emitDeclarationOnly": true,
+    "declarationMap": true,
+    "isolatedModules": true,
+    "lib": "ES2020",
+    "module": "ES2020",
+    "noEmit": true,
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "/home/akachicon/projects/react-playground",
+    "paths": {
+      "@/*": "/home/akachicon/projects/react-playground/src/client/*",
+      "@app/*": "/home/akachicon/projects/react-playground/src/client/app/*",
+      "@styles/*": "/home/akachicon/projects/react-playground/src/client/assets/styles/*",
+      "@fonts/*": "/home/akachicon/projects/react-playground/src/client/assets/fonts/*",
+      "@images/*": "/home/akachicon/projects/react-playground/src/client/assets/images/*"
+    },
+    "typeRoots": [
+      "/home/akachicon/projects/react-playground/node_modules/@types"
+    ],
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true
+  },
+  "include": [
+    "/home/akachicon/projects/react-playground/src/client/**/*.ts",
+    "/home/akachicon/projects/react-playground/src/client/**/*.tsx"
+  ],
+  "exclude": [
+    "**/*.spec.ts",
+    "**/*.spec.tsx"
+  ],
+  "tsBuildInfoFile": "/home/akachicon/projects/react-playground/node_modules/.cache/ts-build-info/app"
+}

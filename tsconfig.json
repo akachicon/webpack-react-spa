@@ -1,0 +1,15 @@
+{
+  "include": [
+    "/home/akachicon/projects/react-playground/src/client/**/*.ts",
+    "/home/akachicon/projects/react-playground/src/client/**/*.tsx"
+  ],
+  "references": [
+    {
+      "path": "/home/akachicon/projects/react-playground/src/client/app.tsconfig.json"
+    },
+    {
+      "path": "/home/akachicon/projects/react-playground/src/client/test.tsconfig.json"
+    }
+  ],
+  "tsBuildInfoFile": "/home/akachicon/projects/react-playground/node_modules/.cache/ts-build-info/solution"
+}
