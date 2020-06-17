@@ -94,6 +94,8 @@ const devServer = {
   hot: true,
 };
 const bundleAnalyzerReportPath = join(baseDir, 'bundle-analyzer.report.html');
+const appTsconfigFile = path.join(clientDir, 'composite.app.tsconfig.json');
+const testTsconfigFile = path.join(clientDir, 'composite.test.tsconfig.json');
 
 module.exports = {
   baseDir,
@@ -116,4 +118,6 @@ module.exports = {
   env,
   devServer,
   bundleAnalyzerReportPath,
+  appTsconfigFile,
+  testTsconfigFile,
 };

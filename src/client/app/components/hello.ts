@@ -1,3 +1,4 @@
-const x: number = 5;
+const x = 5;
+const y = 'some string';
 
-export default x;
+export default { x, y };

@@ -1,15 +1,15 @@
 {
-  "include": [
-    "/home/akachicon/projects/react-playground/src/client/**/*.ts",
-    "/home/akachicon/projects/react-playground/src/client/**/*.tsx"
-  ],
+  "include": [],
+  "files": [],
   "references": [
     {
-      "path": "/home/akachicon/projects/react-playground/src/client/app.tsconfig.json"
+      "path": "/home/akachicon/projects/react-playground/src/client/composite.app.tsconfig.json"
     },
     {
-      "path": "/home/akachicon/projects/react-playground/src/client/test.tsconfig.json"
+      "path": "/home/akachicon/projects/react-playground/src/client/composite.test.tsconfig.json"
     }
   ],
-  "tsBuildInfoFile": "/home/akachicon/projects/react-playground/node_modules/.cache/ts-build-info/solution"
+  "compilerOptions": {
+    "tsBuildInfoFile": "/home/akachicon/projects/react-playground/node_modules/.cache/ts-build-info/solution"
+  }
 }
