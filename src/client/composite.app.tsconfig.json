@@ -6,9 +6,7 @@
   "references": [],
   "compilerOptions": {
     "composite": true,
-    "allowJs": true,
     "emitDeclarationOnly": true,
-    "declarationMap": true,
     "isolatedModules": true,
     "jsx": "preserve",
     "lib": [

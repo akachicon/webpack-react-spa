@@ -27,13 +27,24 @@ module.exports = (api) => {
     },
   ];
 
-  const presetTypescript = {
-    allowDeclareFields: true,
-    onlyRemoveTypeImports: true,
-  };
+  const presetReact = [
+    '@babel/preset-react',
+    {
+      runtime: 'classic',
+      development: env.dev,
+    },
+  ];
+
+  const presetTypescript = [
+    '@babel/preset-typescript',
+    {
+      allowDeclareFields: true,
+      onlyRemoveTypeImports: true,
+    },
+  ];
 
   const plugins = ['@babel/proposal-class-properties', pluginTransformRuntime];
-  const presets = [presetEnv, '@babel/preset-react'];
+  const presets = [presetEnv, presetReact];
 
   if (env.dev && devServer.hot) {
     plugins.push('react-refresh/babel');

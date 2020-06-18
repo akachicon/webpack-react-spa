@@ -128,14 +128,7 @@ const tsConfig = {
 
 module.exports = {
   root: true,
-  ignorePatterns: [
-    'node_modules/**/*',
-    `${relativeOutDir}/**/*`,
-
-    // Ignore .d.ts as these are generated automatically and eslint still
-    // parses them, even if a file with the identical name is present.
-    '*.d.ts',
-  ],
+  ignorePatterns: ['node_modules/**/*', `${relativeOutDir}/**/*`],
   parserOptions: {
     ecmaVersion: 2018,
   },

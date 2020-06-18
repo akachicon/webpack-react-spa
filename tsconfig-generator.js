@@ -44,9 +44,7 @@ const baseConfig = {
   references: [],
   compilerOptions: {
     composite: true,
-    allowJs: true,
     emitDeclarationOnly: true,
-    declarationMap: true,
     isolatedModules: true,
     jsx: 'preserve',
 
@@ -70,7 +68,11 @@ const baseConfig = {
 
 const appConfig = {
   ...baseConfig,
-  include: [`${srcDir}/**/*.ts`, `${srcDir}/**/*.tsx`],
+  include: [
+    // include .js,.jsx file so that we can import them in .ts,.tsx modules
+    `${srcDir}/**/*.ts`,
+    `${srcDir}/**/*.tsx`,
+  ],
   exclude: ['**/*.spec.ts', '**/*.spec.tsx'],
   compilerOptions: {
     ...baseConfig.compilerOptions,
@@ -80,7 +82,15 @@ const appConfig = {
 
 const testConfig = {
   ...baseConfig,
-  include: [`${srcDir}/**/*.spec.ts`, `${srcDir}/**/*.spec.tsx`],
+  include: [
+    `${srcDir}/**/*.spec.ts`,
+    `${srcDir}/**/*.spec.tsx`,
+
+    // Importing modules from a referenced project will not load its
+    // input declaration files. This leads to the inability to import
+    // e.g. ambient modules.
+    `${srcDir}/**/*.d.ts`,
+  ],
   references: [{ path: appTsconfigFile }],
   compilerOptions: {
     ...baseConfig.compilerOptions,

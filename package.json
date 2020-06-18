@@ -28,7 +28,8 @@
   },
   "scripts": {
     "ts:config": "node ./tsconfig-generator.js",
-    "ts:compile": "npm run ts:config && tsc --build .",
+    "ts:compile": "npm run ts:config && tsc --build",
+    "ts:compile:watch": "npm run ts:config && tsc --build --watch",
     "prebuild:base": "npm run ts:config",
     "prebuild:dev": "npm run ts:config",
     "prebuild:prod": "npm run ts:config",

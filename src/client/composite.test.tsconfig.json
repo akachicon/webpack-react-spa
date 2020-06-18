@@ -1,7 +1,8 @@
 {
   "include": [
     "/home/akachicon/projects/react-playground/src/client/**/*.spec.ts",
-    "/home/akachicon/projects/react-playground/src/client/**/*.spec.tsx"
+    "/home/akachicon/projects/react-playground/src/client/**/*.spec.tsx",
+    "/home/akachicon/projects/react-playground/src/client/**/*.d.ts"
   ],
   "references": [
     {
@@ -10,9 +11,7 @@
   ],
   "compilerOptions": {
     "composite": true,
-    "allowJs": true,
     "emitDeclarationOnly": true,
-    "declarationMap": true,
     "isolatedModules": true,
     "jsx": "preserve",
     "lib": [
