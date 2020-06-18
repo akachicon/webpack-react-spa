@@ -27,9 +27,17 @@ module.exports = (api) => {
     },
   ];
 
+  const presetReact = [
+    '@babel/preset-react',
+    {
+      runtime: 'classic',
+      development: env.dev,
+    },
+  ];
+
   const plugins = [pluginTransformRuntime];
 
-  const presets = [presetEnv, '@babel/preset-react'];
+  const presets = [presetEnv, presetReact];
 
   if (env.dev && devServer.hot) {
     plugins.push('react-refresh/babel');
