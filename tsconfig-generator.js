@@ -68,11 +68,7 @@ const baseConfig = {
 
 const appConfig = {
   ...baseConfig,
-  include: [
-    // include .js,.jsx file so that we can import them in .ts,.tsx modules
-    `${srcDir}/**/*.ts`,
-    `${srcDir}/**/*.tsx`,
-  ],
+  include: [`${srcDir}/**/*.ts`, `${srcDir}/**/*.tsx`],
   exclude: ['**/*.spec.ts', '**/*.spec.tsx'],
   compilerOptions: {
     ...baseConfig.compilerOptions,
