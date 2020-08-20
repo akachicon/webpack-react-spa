@@ -1,48 +1,52 @@
 {
   "include": [
-    "/home/akachicon/projects/react-playground/src/client/**/*.spec.ts",
-    "/home/akachicon/projects/react-playground/src/client/**/*.spec.tsx",
-    "/home/akachicon/projects/react-playground/src/client/**/*.d.ts"
+    "declarations/**/*.d.ts",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "**/*.d.ts"
   ],
   "references": [
     {
-      "path": "/home/akachicon/projects/react-playground/src/client/composite.app.tsconfig.json"
+      "path": "/home/akachicon/projects/webpack/webpack-react-spa/src/client/composite.app.tsconfig.json"
     }
   ],
   "compilerOptions": {
+    "incremental": true,
     "composite": true,
     "emitDeclarationOnly": true,
     "isolatedModules": true,
     "jsx": "preserve",
     "lib": [
-      "ES2020",
-      "dom"
+      "dom",
+      "dom.iterable",
+      "esnext"
     ],
     "moduleResolution": "node",
     "strict": true,
     "allowSyntheticDefaultImports": true,
-    "baseUrl": "/home/akachicon/projects/react-playground",
+    "baseUrl": "../..",
     "paths": {
       "@/*": [
-        "/home/akachicon/projects/react-playground/src/client/*"
+        "src/client/*"
       ],
       "@app/*": [
-        "/home/akachicon/projects/react-playground/src/client/app/*"
+        "src/client/app/*"
       ],
       "@styles/*": [
-        "/home/akachicon/projects/react-playground/src/client/assets/styles/*"
+        "src/client/assets/styles/*"
       ],
       "@fonts/*": [
-        "/home/akachicon/projects/react-playground/src/client/assets/fonts/*"
+        "src/client/assets/fonts/*"
       ],
       "@images/*": [
-        "/home/akachicon/projects/react-playground/src/client/assets/images/*"
+        "src/client/assets/images/*"
       ]
     },
     "typeRoots": [
-      "/home/akachicon/projects/react-playground/node_modules/@types"
+      "../../node_modules/@types"
     ],
     "forceConsistentCasingInFileNames": true,
-    "tsBuildInfoFile": "/home/akachicon/projects/react-playground/node_modules/.cache/ts-build-info/test"
+    "resolveJsonModule": true,
+    "tsBuildInfoFile": "../../node_modules/.cache/ts-build-info/test"
   }
 }

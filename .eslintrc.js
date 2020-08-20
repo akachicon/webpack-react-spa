@@ -1,4 +1,3 @@
-const path = require('path');
 const webpackConfig = require('./webpack-config/webpack.base.config');
 const {
   baseDir,
@@ -6,33 +5,27 @@ const {
   serverDir,
   outDir,
   appGlobals,
-  appTsconfigFile,
-  testTsconfigFile,
+  appTsConfigFile,
+  testTsConfigFile,
 } = require('./project.config');
+const {
+  replaceBackslash,
+  relativeToBase: utilsRelativeToBase,
+} = require('./config-utils');
+
+const relativeToBase = utilsRelativeToBase.bind(null, baseDir);
 
 const clientGlobals = Object.keys(appGlobals).reduce((acc, global) => {
   acc[global] = 'readonly';
   return acc;
 }, {});
 
-const relativeToBase = (argPath) => {
-  const isBaseDirAbsolute = path.isAbsolute(baseDir);
-  const isArgPathAbsolute = path.isAbsolute(argPath);
-
-  if (!isBaseDirAbsolute) {
-    throw new Error('base directory has to be absolute');
-  }
-  if (!isArgPathAbsolute) {
-    throw new Error('argument path has to be absolute');
-  }
-  return path.relative(baseDir, argPath);
-};
-
-const replaceBackslash = (str) => str.replace(/\\/g, '/');
-
 const relativeServerDir = replaceBackslash(relativeToBase(serverDir));
 const relativeClientDir = replaceBackslash(relativeToBase(clientDir));
 const relativeOutDir = replaceBackslash(relativeToBase(outDir));
+
+const relativeAppTsConfig = replaceBackslash(relativeToBase(appTsConfigFile));
+const relativeTestTsConfig = replaceBackslash(relativeToBase(testTsConfigFile));
 
 const jsConfig = {
   parserOptions: {
@@ -79,6 +72,8 @@ const jsConfig = {
         allowClassStart: true,
         allowClassEnd: true,
       },
+      // TODO: import/no-cycle should (but does not) handle webpack aliases
+      // 'import/no-cycle': 2,
     ],
   },
   settings: {
@@ -88,23 +83,15 @@ const jsConfig = {
       },
     },
     react: {
-      // TODO: write sensible configs
-      // Regex for Component Factory to use, default to 'createReactClass'.
-      createClass: 'createReactClass',
       pragma: 'React',
       version: 'detect',
     },
     propWrapperFunctions: [
       // The names of any function used to wrap propTypes, e.g. `forbidExtraProps`.
       // If this isn't set, any propTypes wrapped in a function will be skipped.
-      'forbidExtraProps',
-      { property: 'freeze', object: 'Object' },
-      { property: 'myFavoriteWrapper' },
     ],
     linkComponents: [
       // Components used as alternatives to <a> for linking, eg. <Link to={ url } />.
-      'Hyperlink',
-      { name: 'Link', linkAttribute: 'to' },
     ],
   },
 };
@@ -113,7 +100,7 @@ const tsConfig = {
   ...jsConfig,
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: [appTsconfigFile, testTsconfigFile],
+    project: [relativeAppTsConfig, relativeTestTsConfig],
   },
   plugins: [...jsConfig.plugins, '@typescript-eslint'],
   extends: [
@@ -124,11 +111,21 @@ const tsConfig = {
     // Disable rules that can conflict with prettier.
     'prettier/@typescript-eslint',
   ],
+  rules: {
+    ...jsConfig.rules,
+    '@typescript-eslint/ban-ts-comment': [
+      2,
+      {
+        'ts-expect-error': false,
+      },
+    ],
+    'react/prop-types': [0],
+  },
 };
 
 module.exports = {
   root: true,
-  ignorePatterns: ['node_modules/**/*', `${relativeOutDir}/**/*`],
+  ignorePatterns: ['node_modules/**/*', `${relativeOutDir}/**/*`, '**/*.d.ts'],
   parserOptions: {
     ecmaVersion: 2018,
   },

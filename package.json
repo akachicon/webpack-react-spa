@@ -27,8 +27,9 @@
     }
   },
   "scripts": {
-    "ts:config": "node ./tsconfig-generator.js",
+    "ts:config": "node tsconfig-gen.js",
     "ts:compile": "npm run ts:config && tsc --build",
+    "ts:compile:force": "npm run ts:config && tsc --build --force",
     "ts:compile:watch": "npm run ts:config && tsc --build --watch",
     "prebuild:base": "npm run ts:config",
     "prebuild:dev": "npm run ts:config",
@@ -61,7 +62,7 @@
     "@babel/preset-react": "^7.9.4",
     "@babel/preset-typescript": "^7.10.1",
     "@pmmmwh/react-refresh-webpack-plugin": "github:pmmmwh/react-refresh-webpack-plugin",
-    "@types/react": "^16.9.38",
+    "@types/react": "^16.9.46",
     "@types/react-dom": "^16.9.8",
     "@types/source-map": "^0.5.2",
     "@typescript-eslint/eslint-plugin": "^3.3.0",

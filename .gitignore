@@ -5,6 +5,7 @@
 /ssl/**/*.srl
 /ssl/**/*.crt
 /ssl/**/*.csr
+/src/client/app/**/*.d.ts
 /.idea/
 /logs
 *.log
