@@ -7,7 +7,7 @@
   ],
   "references": [
     {
-      "path": "/home/akachicon/projects/webpack/webpack-react-spa/src/client/composite.app.tsconfig.json"
+      "path": "composite.app.tsconfig.json"
     }
   ],
   "compilerOptions": {

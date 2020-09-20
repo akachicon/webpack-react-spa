@@ -122,7 +122,14 @@ const testConfig = {
     // input declaration files.
     `**/*.d.ts`,
   ],
-  references: [{ path: appTsConfigFile }],
+  references: [
+    {
+      path: utilsRelativeToBase(
+        path.dirname(testTsConfigFile),
+        appTsConfigFile
+      ),
+    },
+  ],
   compilerOptions: {
     ...baseConfig.compilerOptions,
     baseUrl: utilsRelativeToBase(path.dirname(testTsConfigFile), baseDir),
