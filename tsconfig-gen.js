@@ -66,7 +66,7 @@ Object.entries(pathAliases).forEach(([alias, aliasPath]) => {
 
 const baseConfig = {
   // declarations supposed to be in the dir along with the config.
-  include: ['declarations/**/*.d.ts'],
+  include: ['declarations/**/*.d.ts', '**/*.json'],
   references: [],
   compilerOptions: {
     incremental: true,
@@ -74,6 +74,7 @@ const baseConfig = {
     emitDeclarationOnly: true,
     isolatedModules: true,
     jsx: 'preserve',
+    target: 'ES2020',
 
     // babel@7.8 default
     lib: ['dom', 'dom.iterable', 'esnext'],
@@ -97,6 +98,7 @@ const baseConfig = {
     typeRoots: [typeRootsDir],
     forceConsistentCasingInFileNames: true,
     resolveJsonModule: true,
+    skipLibCheck: true,
   },
 };
 
