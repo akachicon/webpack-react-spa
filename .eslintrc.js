@@ -42,6 +42,7 @@ const jsConfig = {
   extends: [
     'plugin:import/errors',
     'plugin:import/warnings',
+    'plugin:import/typescript',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
     // TODO: eslint-plugin-jsx-a11y
